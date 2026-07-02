@@ -50,7 +50,7 @@ cd FrontDeskAgent
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env
+python -m frontdeskagent.setup_wizard
 python -m frontdeskagent.app
 ```
 
@@ -88,6 +88,19 @@ OPENZERO_MODEL=local
 ```
 
 See `docs/OPENZERO_INTEGRATION.md`.
+
+## Real Integrations Included
+
+- Inbound voice: Twilio-compatible voice webhook at `/voice/twilio`.
+- Inbound SMS: Twilio webhook at `/sms/twilio` and generic JSON webhook at `/api/webhook/sms`.
+- Outbound SMS: Twilio, Telnyx, or any custom webhook.
+- Outbound calls: Twilio call API or a custom webhook.
+- Email: SMTP lead summaries and handoff emails.
+- Calendar: token-protected `.ics` feed for appointment requests.
+- CRM/automation: generic webhook for n8n, Zapier, Make, CRM systems, or internal APIs.
+- OpenZero: event bridge plus `/api/openzero/context`.
+
+All integrations are optional. The app still works with only SQLite and the built-in rules backend.
 
 ## Industry Playbooks
 

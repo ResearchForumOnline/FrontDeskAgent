@@ -47,6 +47,29 @@ class AppConfig:
     smtp_password: str
     smtp_from: str
     smtp_use_tls: bool
+    public_base_url: str = ""
+    admin_username: str = "admin"
+    admin_password: str = ""
+    admin_auth_enabled: bool = False
+    sms_provider: str = "none"
+    sms_from: str = ""
+    twilio_account_sid: str = ""
+    twilio_auth_token: str = ""
+    twilio_validate_signatures: bool = True
+    telnyx_api_key: str = ""
+    telnyx_messaging_profile_id: str = ""
+    sms_webhook_url: str = ""
+    auto_sms_on_lead: bool = False
+    customer_sms_template: str = "Thanks, your enquiry has been logged. The team will review it and contact you as soon as possible."
+    escalation_sms_enabled: bool = False
+    outbound_call_provider: str = "none"
+    outbound_caller_id: str = ""
+    outbound_webhook_url: str = ""
+    voice_greeting: str = "Thanks for calling. Please briefly say your name, phone number, and what you need help with."
+    transfer_urgent_calls: bool = False
+    crm_webhook_url: str = ""
+    crm_api_key: str = ""
+    calendar_feed_token: str = ""
 
 
 def load_config() -> AppConfig:
@@ -86,6 +109,35 @@ def load_config() -> AppConfig:
         smtp_password=os.getenv("SMTP_PASSWORD", ""),
         smtp_from=os.getenv("SMTP_FROM", ""),
         smtp_use_tls=_bool(os.getenv("SMTP_USE_TLS"), True),
+        public_base_url=os.getenv("PUBLIC_BASE_URL", "").rstrip("/"),
+        admin_username=os.getenv("ADMIN_USERNAME", "admin"),
+        admin_password=os.getenv("ADMIN_PASSWORD", ""),
+        admin_auth_enabled=_bool(os.getenv("ADMIN_AUTH_ENABLED"), bool(os.getenv("ADMIN_PASSWORD", ""))),
+        sms_provider=os.getenv("SMS_PROVIDER", "none").strip().lower(),
+        sms_from=os.getenv("SMS_FROM", ""),
+        twilio_account_sid=os.getenv("TWILIO_ACCOUNT_SID", ""),
+        twilio_auth_token=os.getenv("TWILIO_AUTH_TOKEN", ""),
+        twilio_validate_signatures=_bool(os.getenv("TWILIO_VALIDATE_SIGNATURES"), True),
+        telnyx_api_key=os.getenv("TELNYX_API_KEY", ""),
+        telnyx_messaging_profile_id=os.getenv("TELNYX_MESSAGING_PROFILE_ID", ""),
+        sms_webhook_url=os.getenv("SMS_WEBHOOK_URL", ""),
+        auto_sms_on_lead=_bool(os.getenv("AUTO_SMS_ON_LEAD"), False),
+        customer_sms_template=os.getenv(
+            "CUSTOMER_SMS_TEMPLATE",
+            "Thanks, your enquiry has been logged. The team will review it and contact you as soon as possible.",
+        ),
+        escalation_sms_enabled=_bool(os.getenv("ESCALATION_SMS_ENABLED"), False),
+        outbound_call_provider=os.getenv("OUTBOUND_CALL_PROVIDER", "none").strip().lower(),
+        outbound_caller_id=os.getenv("OUTBOUND_CALLER_ID", ""),
+        outbound_webhook_url=os.getenv("OUTBOUND_WEBHOOK_URL", ""),
+        voice_greeting=os.getenv(
+            "VOICE_GREETING",
+            "Thanks for calling. Please briefly say your name, phone number, and what you need help with.",
+        ),
+        transfer_urgent_calls=_bool(os.getenv("TRANSFER_URGENT_CALLS"), False),
+        crm_webhook_url=os.getenv("CRM_WEBHOOK_URL", ""),
+        crm_api_key=os.getenv("CRM_API_KEY", ""),
+        calendar_feed_token=os.getenv("CALENDAR_FEED_TOKEN", ""),
     )
 
 
@@ -101,4 +153,18 @@ def public_config(config: AppConfig) -> dict:
         "llm_backend": config.llm_backend,
         "ollama_model": config.ollama_model,
         "openzero_enabled": bool(config.openzero_webhook_url or config.llm_backend == "openzero"),
+        "sms_enabled": sms_enabled(config),
+        "crm_enabled": bool(config.crm_webhook_url),
+        "calendar_enabled": bool(config.calendar_feed_token),
+        "public_base_url": config.public_base_url,
     }
+
+
+def sms_enabled(config: AppConfig) -> bool:
+    if config.sms_provider == "twilio":
+        return bool(config.twilio_account_sid and config.twilio_auth_token and config.sms_from)
+    if config.sms_provider == "telnyx":
+        return bool(config.telnyx_api_key and config.sms_from)
+    if config.sms_provider == "webhook":
+        return bool(config.sms_webhook_url)
+    return False

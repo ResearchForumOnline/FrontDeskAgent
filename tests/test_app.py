@@ -39,6 +39,41 @@ def test_call_webhook_creates_lead(tmp_path: Path):
     assert leads[0]["name"] == "Alex"
 
 
+def test_twilio_voice_collect_creates_lead(tmp_path: Path):
+    app = create_app(make_config(tmp_path))
+    client = app.test_client()
+    response = client.post("/voice/twilio/collect", data={"From": "+441234567890", "SpeechResult": "urgent leak in M14"})
+    assert response.status_code == 200
+    assert response.mimetype == "text/xml"
+    leads = client.get("/api/openzero/context").json["recent_leads"]
+    assert leads[0]["source"] == "twilio_voice"
+    assert leads[0]["urgency"] == "urgent"
+
+
+def test_twilio_sms_creates_lead_and_returns_twiml(tmp_path: Path):
+    app = create_app(make_config(tmp_path))
+    client = app.test_client()
+    response = client.post("/sms/twilio", data={"From": "+441234567890", "Body": "Need appointment tomorrow"})
+    assert response.status_code == 200
+    assert b"<Message>" in response.data
+    leads = client.get("/api/openzero/context").json["recent_leads"]
+    assert leads[0]["source"] == "twilio_sms"
+
+
+def test_calendar_feed_requires_token_and_exports_ics(tmp_path: Path):
+    config = make_config(tmp_path)
+    config = config.__class__(**{**config.__dict__, "calendar_feed_token": "test-token"})
+    app = create_app(config)
+    client = app.test_client()
+    client.post("/appointments", data={"requested_time": "2026-07-10 10:30", "notes": "Demo"})
+    denied = client.get("/calendar.ics?token=bad")
+    assert denied.status_code == 403
+    feed = client.get("/calendar.ics?token=test-token")
+    assert feed.status_code == 200
+    assert b"BEGIN:VCALENDAR" in feed.data
+    assert b"BEGIN:VEVENT" in feed.data
+
+
 def make_config(tmp_path: Path) -> AppConfig:
     return AppConfig(
         host="127.0.0.1",

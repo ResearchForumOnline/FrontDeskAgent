@@ -1,7 +1,9 @@
 {% extends "base.html" %}
 {% block title %}Appointments | FrontDeskAgent{% endblock %}
 {% block content %}
-<header class="page-head"><div><p class="eyebrow">Booking lane</p><h1>Appointment requests</h1><p>Log requests clearly until a real calendar integration confirms the slot.</p></div></header>
+<header class="page-head"><div><p class="eyebrow">Booking lane</p><h1>Appointment requests</h1><p>Log requests clearly and publish them to the optional calendar feed for staff review.</p></div>
+{% if full_config is defined and full_config.calendar_feed_token %}<a class="button" href="/calendar.ics?token={{ full_config.calendar_feed_token }}">Calendar feed</a>{% endif %}
+</header>
 <section class="panel">
   <form class="grid-form" method="post" action="/appointments">
     <label>Lead<select name="lead_id"><option value="">No lead selected</option>{% for lead in leads %}<option value="{{ lead.id }}">#{{ lead.id }} {{ lead.name or lead.phone or "Unknown" }}</option>{% endfor %}</select></label>

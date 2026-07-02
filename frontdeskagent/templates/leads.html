@@ -4,7 +4,7 @@
 <header class="page-head"><div><p class="eyebrow">Inbox</p><h1>Lead queue</h1><p>Every call, form, and chat should leave a clean record.</p></div></header>
 <section class="panel">
   <table>
-    <thead><tr><th>ID</th><th>Created</th><th>Name</th><th>Contact</th><th>Urgency</th><th>Reason</th><th>Status</th></tr></thead>
+    <thead><tr><th>ID</th><th>Created</th><th>Name</th><th>Contact</th><th>Urgency</th><th>Reason</th><th>Status</th><th>Actions</th></tr></thead>
     <tbody>
       {% for lead in leads %}
       <tr>
@@ -15,6 +15,16 @@
         <td><span class="badge {{ lead.urgency }}">{{ lead.urgency }}</span></td>
         <td>{{ lead.reason[:180] }}</td>
         <td>{{ lead.status }}</td>
+        <td>
+          {% if lead.phone %}
+          <form class="inline-form" method="post" action="/leads/{{ lead.id }}/callback">
+            <input type="hidden" name="message" value="Hello from {{ config.business_name }}. We received your enquiry and will follow up shortly.">
+            <button class="button small" type="submit">Queue callback</button>
+          </form>
+          {% else %}
+          <span class="muted">No phone</span>
+          {% endif %}
+        </td>
       </tr>
       {% endfor %}
     </tbody>

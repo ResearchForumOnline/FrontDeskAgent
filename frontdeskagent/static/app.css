@@ -52,6 +52,9 @@ nav a, .button {
   font-weight: 800;
 }
 .button.primary { color: #031012; border-color: transparent; background: linear-gradient(135deg, var(--cyan), var(--green)); }
+.button.small { min-height: 34px; padding: 6px 10px; font-size: 12px; }
+.inline-form { display: inline; }
+.inline-form .button { width: max-content; }
 .side-note { position: absolute; left: 22px; right: 22px; bottom: 22px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: rgba(255,255,255,.04); }
 .side-note span { display: block; margin-top: 5px; color: var(--muted); font-size: 13px; }
 .main { margin-left: 280px; padding: 34px; }
@@ -102,6 +105,7 @@ th, td { padding: 12px; border-bottom: 1px solid var(--line); text-align: left; 
 th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .06em; }
 .knowledge-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 16px; }
 .settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.settings-grid .panel { min-height: 210px; }
 @media (max-width: 900px) {
   .sidebar { position: static; width: auto; }
   .side-note { position: static; margin-top: 20px; }

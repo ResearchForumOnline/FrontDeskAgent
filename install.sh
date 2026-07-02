@@ -31,7 +31,11 @@ pip install -r requirements.txt
 
 if [[ ! -f .env ]]; then
   cp .env.example .env
-  echo "==> Created .env. Edit it before production use."
+  echo "==> Created .env from template."
+  if [[ "${FRONTDESKAGENT_SKIP_WIZARD:-0}" != "1" ]]; then
+    echo "==> Running setup wizard. Press Enter for defaults if unsure."
+    python -m frontdeskagent.setup_wizard --env .env --force || true
+  fi
 fi
 
 mkdir -p data runtime

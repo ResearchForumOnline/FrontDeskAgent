@@ -35,6 +35,9 @@
     <div class="kv"><span>LLM backend</span><b>{{ model.backend }}</b></div>
     <div class="kv"><span>Model status</span><b>{{ "OK" if model.ok else "Needs setup" }}</b></div>
     <div class="kv"><span>OpenZero bridge</span><b>{{ "Configured" if config.openzero_enabled else "Off" }}</b></div>
+    <div class="kv"><span>SMS</span><b>{{ "Configured" if integrations.sms else "Off" }}</b></div>
+    <div class="kv"><span>CRM webhook</span><b>{{ "Configured" if integrations.crm else "Off" }}</b></div>
+    <div class="kv"><span>Calendar feed</span><b>{{ "Configured" if integrations.calendar_feed else "Off" }}</b></div>
     <div class="kv"><span>Service areas</span><b>{{ config.service_areas }}</b></div>
   </article>
 </section>

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Integrations | FrontDeskAgent{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Connect the front desk</p>
+    <h1>Integrations</h1>
+    <p>Start with the built-in dashboard, then add phone, SMS, email, CRM, calendar, OpenZero, and local model routes as needed.</p>
+  </div>
+  <a class="button primary" href="/settings">Runtime settings</a>
+</header>
+
+<section class="settings-grid">
+  <article class="panel"><h2>Phone calls</h2><div class="kv"><span>Twilio voice webhook</span><b>{{ full_config.public_base_url or "http://localhost:8088" }}/voice/twilio</b></div><p class="muted">Set this as a Twilio Voice webhook. The app asks the caller to speak, logs the lead, and can transfer urgent calls when configured.</p></article>
+  <article class="panel"><h2>SMS</h2><div class="kv"><span>Status</span><b>{{ "Configured" if integrations.sms else "Not configured" }}</b></div><div class="kv"><span>Twilio SMS webhook</span><b>{{ full_config.public_base_url or "http://localhost:8088" }}/sms/twilio</b></div><p class="muted">Outbound SMS supports Twilio, Telnyx, or a generic webhook.</p></article>
+  <article class="panel"><h2>Email</h2><div class="kv"><span>SMTP</span><b>{{ "Configured" if integrations.email else "Not configured" }}</b></div><p class="muted">Lead summaries go to the escalation email or business email when SMTP is configured.</p></article>
+  <article class="panel"><h2>CRM and automation</h2><div class="kv"><span>Webhook</span><b>{{ "Configured" if integrations.crm else "Not configured" }}</b></div><p class="muted">Use this for n8n, Zapier, Make, a CRM, or your own internal API.</p></article>
+  <article class="panel"><h2>Calendar</h2><div class="kv"><span>ICS feed</span><b>{{ "Configured" if integrations.calendar_feed else "Not configured" }}</b></div>{% if full_config.calendar_feed_token %}<pre>{{ full_config.public_base_url or "http://localhost:8088" }}/calendar.ics?token={{ full_config.calendar_feed_token }}</pre>{% endif %}<p class="muted">Subscribe from Google Calendar, Outlook, Apple Calendar, or Nextcloud as a tentative appointment feed.</p></article>
+  <article class="panel"><h2>OpenZero</h2><div class="kv"><span>Bridge</span><b>{{ "Configured" if integrations.openzero else "Not configured" }}</b></div><p class="muted">OpenZero can read `/api/openzero/context` and receive lead, appointment, and handoff events.</p></article>
+</section>
+
+<section class="panel">
+  <h2>Useful API examples</h2>
+  <pre>curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/webhook/sms \
+  -H "Content-Type: application/json" \
+  -d '{"from":"+441234567890","body":"Need a callback for an urgent leak"}'
+
+curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/outbound/callback \
+  -H "Content-Type: application/json" \
+  -d '{"phone":"+441234567890","message":"Hello, your enquiry has been received."}'</pre>
+</section>
+{% endblock %}
