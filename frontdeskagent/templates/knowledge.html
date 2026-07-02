@@ -10,6 +10,14 @@
     <button class="button primary" type="submit">Add knowledge</button>
   </form>
 </section>
+<section class="panel">
+  <h2>Import a website page</h2>
+  <form class="grid-form" method="post" action="/knowledge/import-url">
+    <label class="wide">Page URL<input name="url" type="url" required placeholder="https://company.com/services"></label>
+    <button class="button primary" type="submit">Import page text</button>
+  </form>
+  <p class="muted">Use this for service pages, FAQs, prices, opening hours, policies, locations, and approved scripts. Review imported text before relying on it in production.</p>
+</section>
 <section class="knowledge-grid">
   {% for item in items %}
   <article class="panel"><span class="eyebrow">{{ item.tags }}</span><h2>{{ item.title }}</h2><p>{{ item.body }}</p></article>

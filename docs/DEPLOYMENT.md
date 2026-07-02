@@ -72,6 +72,7 @@ Assuming `PUBLIC_BASE_URL=https://frontdesk.example.com`:
 - Twilio Voice webhook: `https://frontdesk.example.com/voice/twilio`
 - Twilio SMS webhook: `https://frontdesk.example.com/sms/twilio`
 - Generic SMS webhook: `https://frontdesk.example.com/api/webhook/sms`
+- Email webhook: `https://frontdesk.example.com/api/webhook/email`
 - Generic call webhook: `https://frontdesk.example.com/api/webhook/call`
 - OpenZero context: `https://frontdesk.example.com/api/openzero/context`
 - Calendar feed: `https://frontdesk.example.com/calendar.ics?token=...`

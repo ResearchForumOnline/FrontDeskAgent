@@ -73,6 +73,14 @@ SMTP_FROM=frontdesk@example.com
 ESCALATION_EMAIL=team@example.com
 ```
 
+Inbound email can be sent to:
+
+```text
+https://your-domain.example/api/webhook/email
+```
+
+Use this with n8n, Zapier, Make, a mail parser, or your own mail gateway.
+
 ## CRM / Automation
 
 Use `CRM_WEBHOOK_URL` for n8n, Zapier, Make, a CRM, or an internal API:
@@ -83,6 +91,21 @@ CRM_API_KEY=
 ```
 
 FrontDeskAgent posts lead and appointment events as JSON.
+
+## Booking Systems
+
+Use `BOOKING_WEBHOOK_URL` when another system should confirm or reject appointment requests:
+
+```env
+BOOKING_WEBHOOK_URL=https://automation.example/webhook/booking
+BOOKING_API_KEY=
+```
+
+This is suitable for Cal.com automation, n8n, a CRM booking lane, or an internal calendar service.
+
+## Website Knowledge Import
+
+Paste a public website URL into the knowledge page, or post to `/knowledge/import-url`, to import readable HTML text into the local knowledge base. This is useful for service pages, FAQs, prices, opening hours, policies, and location pages. Review imported text before production use.
 
 ## Calendar
 

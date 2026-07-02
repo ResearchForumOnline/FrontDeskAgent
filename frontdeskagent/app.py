@@ -14,6 +14,7 @@ from .integrations import (
     integration_status,
     make_calendar_ics,
     place_outbound_call,
+    send_booking_event,
     send_crm_event,
     send_sms,
     verify_twilio_signature,
@@ -22,6 +23,7 @@ from .intake import detect_urgency, extract_contact, lead_summary
 from .llm import build_client, model_status, safe_reply
 from .mail import send_summary_email
 from .openzero import send_openzero_event
+from .web_ingest import import_url
 
 
 def create_app(config: AppConfig | None = None) -> Flask:
@@ -140,6 +142,34 @@ def create_app(config: AppConfig | None = None) -> Flask:
         result = handle_new_lead(app, data, "sms.lead_created")
         return jsonify({"ok": True, **result})
 
+    @app.post("/api/webhook/email")
+    def email_webhook():
+        if config.webhook_shared_secret:
+            provided = request.headers.get("X-FrontDeskAgent-Secret", "")
+            if provided != config.webhook_shared_secret:
+                return jsonify({"error": "invalid webhook secret"}), 403
+        payload = request.get_json(silent=True) or {}
+        body = str(payload.get("body") or payload.get("text") or "")
+        subject = str(payload.get("subject") or "Email enquiry")
+        sender = str(payload.get("from") or payload.get("email") or "")
+        combined = f"{subject}\n{sender}\n{body}"
+        contact = extract_contact(combined)
+        data = {
+            "name": payload.get("name", ""),
+            "phone": payload.get("phone") or contact["phone"],
+            "email": sender if "@" in sender else contact["email"],
+            "company": payload.get("company", ""),
+            "reason": f"{subject}: {body}"[:500],
+            "urgency": payload.get("urgency") or detect_urgency(combined),
+            "preferred_time": payload.get("preferred_time", ""),
+            "postcode": payload.get("postcode") or contact["postcode"],
+            "source": payload.get("source", "email_webhook"),
+            "transcript": body,
+        }
+        data["summary"] = lead_summary(data)
+        result = handle_new_lead(app, data, "email.lead_created")
+        return jsonify({"ok": True, **result})
+
     @app.route("/voice/twilio", methods=["GET", "POST"])
     def twilio_voice():
         if not twilio_request_is_valid(config):
@@ -213,6 +243,7 @@ def create_app(config: AppConfig | None = None) -> Flask:
         db.add_event("appointment.requested", compact_payload(payload))
         send_openzero_event(config, "appointment.requested", payload)
         record_external_result(db, "crm.appointment", safe_external(send_crm_event, config, "appointment.requested", payload))
+        record_external_result(db, "booking.appointment", safe_external(send_booking_event, config, "appointment.requested", payload))
         if lead and lead.get("phone"):
             sms_result = safe_external(send_sms, config, lead["phone"], f"Your appointment request has been logged: {payload['requested_time']}.")
             record_external_result(db, "sms.appointment_confirmation", sms_result)
@@ -237,6 +268,18 @@ def create_app(config: AppConfig | None = None) -> Flask:
         db: Database = app.config["FDA_DB"]
         db.add_knowledge(request.form.get("title", ""), request.form.get("body", ""), request.form.get("tags", ""))
         db.add_event("knowledge.added", compact_payload({"title": request.form.get("title", "")}))
+        return redirect(url_for("knowledge"))
+
+    @app.post("/knowledge/import-url")
+    def import_knowledge_url():
+        db: Database = app.config["FDA_DB"]
+        url = request.form.get("url", "").strip()
+        try:
+            imported = import_url(url, max_chars=config.website_import_max_chars)
+            item_id = db.add_knowledge(imported["title"], f"Source: {imported['url']}\n\n{imported['body']}", imported["tags"])
+            db.add_event("knowledge.imported_url", compact_payload({"id": item_id, "url": url, "title": imported["title"]}))
+        except Exception as exc:
+            db.add_event("knowledge.import_failed", compact_payload({"url": url, "error": f"{type(exc).__name__}: {exc}"}))
         return redirect(url_for("knowledge"))
 
     @app.get("/settings")
@@ -287,7 +330,9 @@ def create_app(config: AppConfig | None = None) -> Flask:
                 "twilio_voice_webhook",
                 "twilio_sms_webhook",
                 "generic_sms_webhook",
+                "email_webhook",
                 "crm_webhook",
+                "booking_webhook",
                 "calendar_ics_feed",
                 "outbound_callback",
             ],

@@ -21,6 +21,7 @@ def integration_status(config: AppConfig) -> dict:
         "email": bool(config.smtp_host and config.smtp_from),
         "crm": bool(config.crm_webhook_url),
         "calendar_feed": bool(config.calendar_feed_token),
+        "booking": bool(config.booking_webhook_url),
         "openzero": bool(config.openzero_webhook_url or config.llm_backend == "openzero"),
         "outbound_calls": outbound_enabled(config),
         "voice_webhook": bool(config.public_base_url),
@@ -84,6 +85,18 @@ def send_crm_event(config: AppConfig, event_type: str, payload: dict) -> dict:
         headers["Authorization"] = f"Bearer {config.crm_api_key}"
     body = {"service": "frontdeskagent", "event_type": event_type, "payload": payload}
     response = requests.post(config.crm_webhook_url, headers=headers, json=body, timeout=12)
+    response.raise_for_status()
+    return {"sent": True, "status": response.status_code}
+
+
+def send_booking_event(config: AppConfig, event_type: str, payload: dict) -> dict:
+    if not config.booking_webhook_url:
+        return {"sent": False, "reason": "booking webhook is not configured"}
+    headers = {"Content-Type": "application/json"}
+    if config.booking_api_key:
+        headers["Authorization"] = f"Bearer {config.booking_api_key}"
+    body = {"service": "frontdeskagent", "event_type": event_type, "payload": payload}
+    response = requests.post(config.booking_webhook_url, headers=headers, json=body, timeout=12)
     response.raise_for_status()
     return {"sent": True, "status": response.status_code}
 

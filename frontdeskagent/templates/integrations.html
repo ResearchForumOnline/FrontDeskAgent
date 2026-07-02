@@ -15,6 +15,8 @@
   <article class="panel"><h2>SMS</h2><div class="kv"><span>Status</span><b>{{ "Configured" if integrations.sms else "Not configured" }}</b></div><div class="kv"><span>Twilio SMS webhook</span><b>{{ full_config.public_base_url or "http://localhost:8088" }}/sms/twilio</b></div><p class="muted">Outbound SMS supports Twilio, Telnyx, or a generic webhook.</p></article>
   <article class="panel"><h2>Email</h2><div class="kv"><span>SMTP</span><b>{{ "Configured" if integrations.email else "Not configured" }}</b></div><p class="muted">Lead summaries go to the escalation email or business email when SMTP is configured.</p></article>
   <article class="panel"><h2>CRM and automation</h2><div class="kv"><span>Webhook</span><b>{{ "Configured" if integrations.crm else "Not configured" }}</b></div><p class="muted">Use this for n8n, Zapier, Make, a CRM, or your own internal API.</p></article>
+  <article class="panel"><h2>Email intake</h2><div class="kv"><span>Inbound email webhook</span><b>{{ full_config.public_base_url or "http://localhost:8088" }}/api/webhook/email</b></div><p class="muted">Use this with an email parser, n8n, Zapier, Make, or a mail gateway to turn inbox enquiries into leads.</p></article>
+  <article class="panel"><h2>Booking systems</h2><div class="kv"><span>Webhook</span><b>{{ "Configured" if integrations.booking else "Not configured" }}</b></div><p class="muted">Send appointment requests to Cal.com, n8n, a CRM, or another booking workflow for confirmation.</p></article>
   <article class="panel"><h2>Calendar</h2><div class="kv"><span>ICS feed</span><b>{{ "Configured" if integrations.calendar_feed else "Not configured" }}</b></div>{% if full_config.calendar_feed_token %}<pre>{{ full_config.public_base_url or "http://localhost:8088" }}/calendar.ics?token={{ full_config.calendar_feed_token }}</pre>{% endif %}<p class="muted">Subscribe from Google Calendar, Outlook, Apple Calendar, or Nextcloud as a tentative appointment feed.</p></article>
   <article class="panel"><h2>OpenZero</h2><div class="kv"><span>Bridge</span><b>{{ "Configured" if integrations.openzero else "Not configured" }}</b></div><p class="muted">OpenZero can read `/api/openzero/context` and receive lead, appointment, and handoff events.</p></article>
 </section>
@@ -27,6 +29,10 @@
 
 curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/outbound/callback \
   -H "Content-Type: application/json" \
-  -d '{"phone":"+441234567890","message":"Hello, your enquiry has been received."}'</pre>
+  -d '{"phone":"+441234567890","message":"Hello, your enquiry has been received."}'
+
+curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/webhook/email \
+  -H "Content-Type: application/json" \
+  -d '{"from":"caller@example.com","subject":"Quote request","body":"Can you call me tomorrow?"}'</pre>
 </section>
 {% endblock %}

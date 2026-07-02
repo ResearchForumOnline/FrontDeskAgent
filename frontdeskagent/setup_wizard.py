@@ -53,6 +53,7 @@ def main() -> int:
         sms_webhook = ask("SMS webhook URL", "")
 
     crm_webhook = ask("CRM/n8n/Zapier/Make webhook URL", "")
+    booking_webhook = ask("Booking/calendar webhook URL", "")
     openzero_webhook = ask("OpenZero event webhook URL", "")
 
     values = {
@@ -105,6 +106,9 @@ def main() -> int:
         "CRM_WEBHOOK_URL": crm_webhook,
         "CRM_API_KEY": "",
         "CALENDAR_FEED_TOKEN": token_urlsafe(24),
+        "BOOKING_WEBHOOK_URL": booking_webhook,
+        "BOOKING_API_KEY": "",
+        "WEBSITE_IMPORT_MAX_CHARS": "12000",
         "SMTP_HOST": "",
         "SMTP_PORT": "587",
         "SMTP_USERNAME": "",

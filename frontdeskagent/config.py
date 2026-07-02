@@ -70,6 +70,9 @@ class AppConfig:
     crm_webhook_url: str = ""
     crm_api_key: str = ""
     calendar_feed_token: str = ""
+    booking_webhook_url: str = ""
+    booking_api_key: str = ""
+    website_import_max_chars: int = 12000
 
 
 def load_config() -> AppConfig:
@@ -138,6 +141,9 @@ def load_config() -> AppConfig:
         crm_webhook_url=os.getenv("CRM_WEBHOOK_URL", ""),
         crm_api_key=os.getenv("CRM_API_KEY", ""),
         calendar_feed_token=os.getenv("CALENDAR_FEED_TOKEN", ""),
+        booking_webhook_url=os.getenv("BOOKING_WEBHOOK_URL", ""),
+        booking_api_key=os.getenv("BOOKING_API_KEY", ""),
+        website_import_max_chars=int(os.getenv("WEBSITE_IMPORT_MAX_CHARS", "12000")),
     )
 
 

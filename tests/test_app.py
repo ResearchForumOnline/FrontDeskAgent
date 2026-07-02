@@ -4,6 +4,7 @@ from pathlib import Path
 
 from frontdeskagent.app import create_app
 from frontdeskagent.config import AppConfig
+from frontdeskagent.web_ingest import TextExtractor
 
 
 def test_dashboard_and_health(tmp_path: Path):
@@ -72,6 +73,27 @@ def test_calendar_feed_requires_token_and_exports_ics(tmp_path: Path):
     assert feed.status_code == 200
     assert b"BEGIN:VCALENDAR" in feed.data
     assert b"BEGIN:VEVENT" in feed.data
+
+
+def test_email_webhook_creates_lead(tmp_path: Path):
+    app = create_app(make_config(tmp_path))
+    client = app.test_client()
+    response = client.post(
+        "/api/webhook/email",
+        json={"from": "caller@example.com", "subject": "Quote request", "body": "Please call +441234567890 tomorrow"},
+    )
+    assert response.status_code == 200
+    leads = client.get("/api/openzero/context").json["recent_leads"]
+    assert leads[0]["source"] == "email_webhook"
+    assert leads[0]["email"] == "caller@example.com"
+
+
+def test_text_extractor_ignores_scripts():
+    parser = TextExtractor()
+    parser.feed("<html><title>Services</title><script>bad()</script><h1>Emergency plumber</h1><p>Open 24/7.</p></html>")
+    assert parser.title == "Services"
+    assert "Emergency plumber" in "\n".join(parser.parts)
+    assert "bad()" not in "\n".join(parser.parts)
 
 
 def make_config(tmp_path: Path) -> AppConfig:

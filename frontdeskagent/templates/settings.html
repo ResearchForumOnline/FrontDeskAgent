@@ -15,6 +15,7 @@
     <div class="kv"><span>SMS provider</span><b>{{ full_config.sms_provider }}</b></div>
     <div class="kv"><span>Outbound calls</span><b>{{ "set" if integrations.outbound_calls else "not set" }}</b></div>
     <div class="kv"><span>CRM webhook</span><b>{{ "set" if integrations.crm else "not set" }}</b></div>
+    <div class="kv"><span>Booking webhook</span><b>{{ "set" if integrations.booking else "not set" }}</b></div>
     <div class="kv"><span>Calendar feed</span><b>{{ "set" if integrations.calendar_feed else "not set" }}</b></div>
     <div class="kv"><span>Public URL</span><b>{{ full_config.public_base_url or "not set" }}</b></div>
     <div class="kv"><span>Twilio signatures</span><b>{{ "verified" if integrations.twilio_signature_validation else "not active" }}</b></div>

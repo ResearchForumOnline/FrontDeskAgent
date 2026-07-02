@@ -13,6 +13,7 @@ Companion playbooks: https://github.com/ResearchForumOnline/FrontDeskAgent-Playb
 - Captures caller or web-chat details into a local SQLite lead inbox.
 - Runs industry-specific intake flows for plumbers, clinics, admissions, hotels, professional firms, and general front desks.
 - Uses a local knowledge base for business hours, services, prices, service areas, policies, and escalation rules.
+- Imports public website pages into the knowledge base for website-trained answers.
 - Generates receptionist replies through Ollama, llama.cpp server, OpenAI-compatible APIs, OpenZero, or a no-model fallback.
 - Creates appointment requests and staff handoff summaries.
 - Exposes webhook endpoints for telephony, forms, CRM tools, and OpenZero.
@@ -96,7 +97,9 @@ See `docs/OPENZERO_INTEGRATION.md`.
 - Outbound SMS: Twilio, Telnyx, or any custom webhook.
 - Outbound calls: Twilio call API or a custom webhook.
 - Email: SMTP lead summaries and handoff emails.
+- Email intake: generic email webhook for mail parsers, n8n, Zapier, Make, or an internal mail gateway.
 - Calendar: token-protected `.ics` feed for appointment requests.
+- Booking systems: optional booking webhook for Cal.com, n8n, CRM booking flows, or internal APIs.
 - CRM/automation: generic webhook for n8n, Zapier, Make, CRM systems, or internal APIs.
 - OpenZero: event bridge plus `/api/openzero/context`.
 

@@ -47,6 +47,18 @@ X-FrontDeskAgent-Secret: optional-shared-secret
 {"from":"+441234567890","body":"Need a callback for an urgent leak in M14"}
 ```
 
+## Email Webhook
+
+```http
+POST /api/webhook/email
+Content-Type: application/json
+X-FrontDeskAgent-Secret: optional-shared-secret
+
+{"from":"caller@example.com","subject":"Quote request","body":"Can you call me tomorrow?"}
+```
+
+Use this with an email parser, n8n, Zapier, Make, or a mail gateway to turn inbound email into leads.
+
 Twilio Messaging webhook:
 
 ```text
@@ -76,6 +88,17 @@ X-FrontDeskAgent-Secret: optional-shared-secret
 ```
 
 Works with `OUTBOUND_CALL_PROVIDER=twilio` or `OUTBOUND_CALL_PROVIDER=webhook`.
+
+## Website Knowledge Import
+
+```http
+POST /knowledge/import-url
+Content-Type: application/x-www-form-urlencoded
+
+url=https://company.example/services
+```
+
+Fetches public HTML, extracts readable page text, and stores it in the local knowledge base for review.
 
 ## Calendar Feed
 
