@@ -6,6 +6,8 @@ It is built CPU-first: SQLite, Flask, simple HTML, and local model backends that
 
 Public site: https://frontdeskagent.online/
 
+Companion playbooks: https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks
+
 ## What It Does
 
 - Captures caller or web-chat details into a local SQLite lead inbox.
@@ -86,6 +88,12 @@ OPENZERO_MODEL=local
 ```
 
 See `docs/OPENZERO_INTEGRATION.md`.
+
+## Industry Playbooks
+
+Use the companion playbook library for ready-made intake structures covering plumbing, clinics, hotels, university admissions, estate agents, and agency discovery calls:
+
+https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks
 
 ## Repository Boundary
 
