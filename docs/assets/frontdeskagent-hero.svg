@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-labelledby="title desc">
+  <title id="title">FrontDeskAgent open-source AI receptionist</title>
+  <desc id="desc">A polished dashboard-style banner showing local-first lead capture, calls, messages, bookings, OpenZero, and API fallback routes.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#071314"/>
+      <stop offset="0.52" stop-color="#0b2224"/>
+      <stop offset="1" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#24f1d5"/>
+      <stop offset="1" stop-color="#f6d365"/>
+    </linearGradient>
+    <pattern id="grid" width="64" height="56" patternUnits="userSpaceOnUse">
+      <path d="M32 2 62 18v32L32 66 2 50V18Z" fill="none" stroke="#1df3da" stroke-opacity=".08" stroke-width="1"/>
+      <path d="M32 10 54 22v24L32 58 10 46V22Z" fill="none" stroke="#f6d365" stroke-opacity=".05" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="1280" height="480" fill="url(#bg)"/>
+  <rect width="1280" height="480" fill="url(#grid)"/>
+  <circle cx="1130" cy="80" r="210" fill="#24f1d5" opacity=".08"/>
+  <circle cx="220" cy="420" r="250" fill="#f6d365" opacity=".07"/>
+  <path d="M90 352 C240 288 330 404 486 320 S760 186 916 252 1112 332 1190 260" fill="none" stroke="#24f1d5" stroke-opacity=".45" stroke-width="3"/>
+  <path d="M90 386 C252 318 338 438 492 354 S748 226 910 286 1084 360 1190 294" fill="none" stroke="#f6d365" stroke-opacity=".28" stroke-width="2"/>
+
+  <g transform="translate(72 70)">
+    <rect x="0" y="0" width="572" height="332" rx="18" fill="#0b1719" fill-opacity=".86" stroke="#2cebd8" stroke-opacity=".35"/>
+    <rect x="22" y="24" width="150" height="36" rx="12" fill="url(#accent)"/>
+    <text x="44" y="48" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="18" font-weight="800" fill="#071314">FRONTDESK</text>
+    <text x="24" y="112" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="52" font-weight="900" fill="#f8fafc">Self-hosted</text>
+    <text x="24" y="170" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="52" font-weight="900" fill="#f8fafc">AI receptionist</text>
+    <text x="26" y="216" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="21" fill="#b9c8cf">Calls, SMS, email, web chat, bookings, CRM handoffs,</text>
+    <text x="26" y="246" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="21" fill="#b9c8cf">local knowledge, OpenZero and optional paid API fallback.</text>
+    <g transform="translate(26 282)">
+      <rect width="122" height="34" rx="17" fill="#143b3b" stroke="#24f1d5" stroke-opacity=".45"/>
+      <text x="18" y="23" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="800" fill="#dffbf7">CPU first</text>
+      <rect x="138" width="150" height="34" rx="17" fill="#2d2716" stroke="#f6d365" stroke-opacity=".45"/>
+      <text x="156" y="23" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="800" fill="#fff1b8">MIT licensed</text>
+      <rect x="304" width="188" height="34" rx="17" fill="#111827" stroke="#94a3b8" stroke-opacity=".45"/>
+      <text x="322" y="23" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="800" fill="#e5eef5">Docker + systemd</text>
+    </g>
+  </g>
+
+  <g transform="translate(706 62)" filter="url(#glow)">
+    <rect x="0" y="0" width="496" height="356" rx="20" fill="#0d191b" fill-opacity=".92" stroke="#24f1d5" stroke-opacity=".28"/>
+    <g transform="translate(30 28)">
+      <rect width="436" height="72" rx="14" fill="#122327" stroke="#24f1d5" stroke-opacity=".2"/>
+      <circle cx="34" cy="36" r="14" fill="#24f1d5"/>
+      <text x="64" y="33" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="16" font-weight="800" fill="#f8fafc">New enquiry captured</text>
+      <text x="64" y="55" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#a7bac2">urgent callback, booking request, or quote lead</text>
+    </g>
+    <g transform="translate(30 122)">
+      <rect width="198" height="78" rx="14" fill="#102a2b" stroke="#24f1d5" stroke-opacity=".24"/>
+      <text x="20" y="32" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="800" fill="#f8fafc">Local AI route</text>
+      <text x="20" y="55" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#b9c8cf">OpenZero, Ollama, llama.cpp</text>
+      <rect x="238" width="198" height="78" rx="14" fill="#24200f" stroke="#f6d365" stroke-opacity=".3"/>
+      <text x="258" y="32" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="800" fill="#f8fafc">API route</text>
+      <text x="258" y="55" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="13" fill="#d8ceb0">OpenAI-compatible fallback</text>
+    </g>
+    <g transform="translate(30 224)">
+      <rect width="128" height="74" rx="14" fill="#111827" stroke="#94a3b8" stroke-opacity=".22"/>
+      <text x="18" y="32" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="800" fill="#f8fafc">Lead inbox</text>
+      <text x="18" y="53" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#b9c8cf">SQLite</text>
+      <rect x="154" width="128" height="74" rx="14" fill="#111827" stroke="#94a3b8" stroke-opacity=".22"/>
+      <text x="172" y="32" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="800" fill="#f8fafc">Calendar</text>
+      <text x="172" y="53" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#b9c8cf">ICS feed</text>
+      <rect x="308" width="128" height="74" rx="14" fill="#111827" stroke="#94a3b8" stroke-opacity=".22"/>
+      <text x="326" y="32" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="14" font-weight="800" fill="#f8fafc">CRM</text>
+      <text x="326" y="53" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="12" fill="#b9c8cf">webhooks</text>
+    </g>
+    <path d="M248 100v22M154 200v24M342 200v24" stroke="#24f1d5" stroke-opacity=".55" stroke-width="2" stroke-linecap="round"/>
+  </g>
+</svg>

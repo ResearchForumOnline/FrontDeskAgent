@@ -31,7 +31,7 @@ def main() -> int:
     admin_user = ask("Admin username", "admin")
     admin_password = ask_secret("Admin password", token_urlsafe(18))
 
-    llm_backend = ask_choice("LLM backend", ["rules", "ollama", "llamacpp", "openai_compat", "openzero"], "rules")
+    llm_backend = ask_choice("LLM backend", ["auto", "openzero", "ollama", "llamacpp", "openai_compat", "rules"], "auto")
     ollama_model = ask("Ollama model", "qwen2.5:3b")
 
     sms_provider = ask_choice("SMS provider", ["none", "twilio", "telnyx", "webhook"], "none")

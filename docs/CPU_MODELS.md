@@ -1,14 +1,15 @@
 # CPU Model Guide
 
-FrontDeskAgent can work without a model, but a small local LLM makes the receptionist more natural.
+FrontDeskAgent can work without a model, but a small local LLM makes the receptionist more natural. Fresh installs use `LLM_BACKEND=auto`, which tries local routes first and keeps hosted APIs optional.
 
 ## Recommended Backend Order
 
-1. `rules` for first boot and smoke tests.
-2. `ollama` for the easiest CPU-first local model setup.
-3. `llamacpp` when you already run a llama.cpp server with GGUF files.
-4. `openzero` when OpenZero is the local AI bridge.
-5. `openai_compat` for any compatible endpoint.
+1. `auto` for local-first routing with a safe fallback.
+2. `openzero` when you want to force a local OpenZero LLM bridge.
+3. `ollama` for the easiest CPU-first local model setup.
+4. `llamacpp` when you already run a llama.cpp server with GGUF files.
+5. `openai_compat` for a hosted or private compatible endpoint.
+6. `rules` for zero-model testing.
 
 ## Ollama
 
@@ -20,7 +21,7 @@ ollama pull qwen2.5:3b
 `.env`:
 
 ```env
-LLM_BACKEND=ollama
+LLM_BACKEND=auto
 OLLAMA_URL=http://127.0.0.1:11434
 OLLAMA_MODEL=qwen2.5:3b
 ```
@@ -36,7 +37,7 @@ llama-server -m ./models/model.gguf --host 127.0.0.1 --port 8080
 `.env`:
 
 ```env
-LLM_BACKEND=llamacpp
+LLM_BACKEND=auto
 LLAMACPP_URL=http://127.0.0.1:8080/v1/chat/completions
 OPENAI_COMPAT_MODEL=local-gguf
 ```
@@ -50,3 +51,5 @@ For CPU servers, start small. A useful receptionist usually needs reliable short
 - Quantized GGUF Q4/Q5 style files are usually the practical CPU lane.
 
 Do not commit model files to GitHub. Keep them under `models/` or the model server's own store.
+
+See `docs/AI_ROUTING.md` for OpenZero, local model, hosted API, and no-model fallback details.

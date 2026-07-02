@@ -1,9 +1,11 @@
 from __future__ import annotations
 
+from dataclasses import replace
 from pathlib import Path
 
 from frontdeskagent.app import create_app
 from frontdeskagent.config import AppConfig
+from frontdeskagent.llm import model_status
 from frontdeskagent.web_ingest import TextExtractor
 
 
@@ -25,6 +27,38 @@ def test_chat_rules_backend(tmp_path: Path):
     assert response.status_code == 200
     assert response.json["urgency"] == "urgent"
     assert "urgent" in response.json["reply"].lower()
+
+
+def test_auto_backend_falls_back_to_rules(tmp_path: Path):
+    config = replace(
+        make_config(tmp_path),
+        llm_backend="auto",
+        openzero_llm_url="http://127.0.0.1:9/v1/chat/completions",
+        ollama_url="http://127.0.0.1:9",
+        llamacpp_url="",
+        openai_compat_url="",
+        openai_compat_model="",
+    )
+    app = create_app(config)
+    client = app.test_client()
+    response = client.post("/api/chat", json={"message": "I have an urgent leak today"})
+    assert response.status_code == 200
+    assert response.json["urgency"] == "urgent"
+    assert "urgent" in response.json["reply"].lower()
+
+
+def test_auto_model_status_reports_route_order(tmp_path: Path):
+    config = replace(
+        make_config(tmp_path),
+        llm_backend="auto",
+        openzero_llm_url="http://127.0.0.1:9/v1/chat/completions",
+        ollama_url="http://127.0.0.1:9",
+        llamacpp_url="",
+    )
+    status = model_status(config)
+    assert status["backend"] == "auto"
+    assert status["routes"][-1]["backend"] == "rules"
+    assert status["routes"][-1]["ok"] is True
 
 
 def test_call_webhook_creates_lead(tmp_path: Path):

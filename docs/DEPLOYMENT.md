@@ -1,6 +1,6 @@
 # Deployment
 
-FrontDeskAgent is designed for normal CPU servers. A small VPS can run the dashboard, SQLite, webhooks, and rule-based fallback. Add a local model only when the machine has enough RAM.
+FrontDeskAgent is designed for normal CPU servers. A small VPS can run the dashboard, SQLite, webhooks, and no-model fallback. Add OpenZero, Ollama, llama.cpp, or a hosted API fallback when the machine and budget are ready.
 
 ## Minimum Practical Server
 
@@ -58,6 +58,7 @@ server {
 
 - Change `SECRET_KEY`.
 - Enable `ADMIN_AUTH_ENABLED=true` and set `ADMIN_PASSWORD` before exposing the dashboard.
+- Keep `LLM_BACKEND=auto` for local-first AI routing unless you deliberately want to force one backend.
 - Put the app behind HTTPS.
 - Protect admin access with your reverse proxy, VPN, or network rules.
 - Keep `.env`, SQLite, transcripts, recordings, and customer data private.

@@ -1,47 +1,70 @@
 # FrontDeskAgent
 
-FrontDeskAgent is a self-hosted AI receptionist and front desk console for small businesses, clinics, trades, education teams, hotels, agencies, and any organisation that needs calls, messages, leads, bookings, and handoffs captured reliably.
+![FrontDeskAgent open-source AI receptionist](docs/assets/frontdeskagent-hero.svg)
 
-It is built CPU-first: SQLite, Flask, simple HTML, and local model backends that work with Ollama, llama.cpp server, OpenAI-compatible endpoints, or OpenZero. A rule-based fallback is included so the product still runs before a model is installed.
+[![Python](https://img.shields.io/badge/Python-3.11%2B-24f1d5)](pyproject.toml)
+[![License](https://img.shields.io/badge/License-MIT-f6d365)](LICENSE)
+[![Local first](https://img.shields.io/badge/AI-local--first-24f1d5)](docs/AI_ROUTING.md)
+[![OpenZero](https://img.shields.io/badge/OpenZero-ready-0ea5a6)](docs/OPENZERO_INTEGRATION.md)
+
+FrontDeskAgent is a self-hosted AI receptionist and front desk console for small businesses, clinics, trades, education teams, hotels, agencies, and any organisation that needs enquiries captured reliably.
+
+It is built for ordinary CPU servers first: Flask, SQLite, simple templates, local knowledge, local model routes, and a no-model fallback. OpenZero, Ollama, and llama.cpp are first-class routes. Hosted OpenAI-compatible APIs are optional secondary fallbacks when an operator deliberately adds API keys.
 
 Public site: https://frontdeskagent.online/
 
 Companion playbooks: https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks
 
-## What It Does
+## What It Gives You
 
-- Captures caller or web-chat details into a local SQLite lead inbox.
-- Runs industry-specific intake flows for plumbers, clinics, admissions, hotels, professional firms, and general front desks.
-- Uses a local knowledge base for business hours, services, prices, service areas, policies, and escalation rules.
-- Imports public website pages into the knowledge base for website-trained answers.
-- Generates receptionist replies through Ollama, llama.cpp server, OpenAI-compatible APIs, OpenZero, or a no-model fallback.
-- Creates appointment requests and staff handoff summaries.
-- Exposes webhook endpoints for telephony, forms, CRM tools, and OpenZero.
-- Sends events to OpenZero when configured, so OpenZero can supervise or extend the workflow.
-- Ships with install scripts, Docker support, systemd examples, and deployment docs.
+- Local lead inbox for web chat, forms, SMS, email, and phone intake events.
+- Industry-aware intake flows for trades, clinics, admissions, hotels, property, agencies, and general front desks.
+- Knowledge base for opening hours, service areas, prices, policies, escalation rules, and imported website text.
+- AI replies through `auto`, OpenZero, Ollama, llama.cpp, any OpenAI-compatible endpoint, or the built-in rules fallback.
+- Appointment request logging plus a token-protected `.ics` calendar feed.
+- Twilio-compatible voice webhook that captures caller speech and creates a lead.
+- Twilio SMS webhook plus generic JSON SMS and email intake webhooks.
+- Outbound SMS through Twilio, Telnyx, or any custom webhook.
+- Outbound callback trigger through Twilio or a custom webhook.
+- SMTP staff handoff emails.
+- CRM, booking, n8n, Zapier, Make, and internal API webhooks.
+- OpenZero event bridge and `/api/openzero/context` for local agent supervision.
+- Admin auth, webhook shared secrets, optional Twilio signature verification, Docker, systemd, and a beginner setup wizard.
 
-## CPU-First Model Options
+## Local-First AI Routing
 
-Recommended first path:
+Fresh installs use:
+
+```env
+LLM_BACKEND=auto
+```
+
+`auto` mode tries the practical self-hosted routes before touching a hosted API:
+
+1. OpenZero local LLM bridge: `OPENZERO_LLM_URL`
+2. Ollama CPU model: `OLLAMA_URL` and `OLLAMA_MODEL`
+3. llama.cpp GGUF server: `LLAMACPP_URL`
+4. OpenAI-compatible hosted/API fallback, only when `OPENAI_COMPAT_URL` and `OPENAI_COMPAT_MODEL` are configured
+5. Built-in rules fallback, so the app still answers before a model is installed
+
+![FrontDeskAgent local-first architecture](docs/assets/frontdeskagent-routing.svg)
+
+Recommended CPU starter model:
 
 ```bash
 ollama serve
 ollama pull qwen2.5:3b
 ```
 
-Then set:
+Optional hosted OpenAI-compatible fallback:
 
 ```env
-LLM_BACKEND=ollama
-OLLAMA_MODEL=qwen2.5:3b
+OPENAI_COMPAT_URL=https://api.openai.com/v1/chat/completions
+OPENAI_COMPAT_API_KEY=sk-your-key
+OPENAI_COMPAT_MODEL=gpt-5.5
 ```
 
-Other options:
-
-- `LLM_BACKEND=llamacpp` for a local llama.cpp OpenAI-compatible server.
-- `LLM_BACKEND=openai_compat` for any OpenAI-compatible endpoint.
-- `LLM_BACKEND=openzero` to route through a local OpenZero node.
-- `LLM_BACKEND=rules` for zero-model testing.
+Keep paid providers optional. The app is designed to keep running locally without them.
 
 ## Quick Start
 
@@ -71,6 +94,16 @@ less install-frontdeskagent.sh
 bash install-frontdeskagent.sh
 ```
 
+## Pages In The App
+
+- Dashboard: live counts, recent leads, integration status, model status, and activity.
+- Playground: test the receptionist and save manual leads.
+- Leads: review enquiries, urgency, source, contact details, and trigger callbacks.
+- Appointments: create appointment requests and publish the optional calendar feed.
+- Knowledge: add manual notes or import public website pages.
+- Integrations: copy webhook URLs for Twilio, SMS, email, CRM, booking, calendar, and OpenZero.
+- Settings: verify configured model, security, SMS, CRM, and deployment options.
+
 ## OpenZero Integration
 
 FrontDeskAgent can publish lead, booking, handoff, and health events to OpenZero:
@@ -80,36 +113,25 @@ OPENZERO_WEBHOOK_URL=http://127.0.0.1:1024/api/frontdeskagent/event
 OPENZERO_API_KEY=
 ```
 
-It can also use OpenZero as the LLM bridge:
+It can also use OpenZero as the first LLM bridge in `auto` mode:
 
 ```env
-LLM_BACKEND=openzero
+LLM_BACKEND=auto
 OPENZERO_LLM_URL=http://127.0.0.1:1024/v1/chat/completions
 OPENZERO_MODEL=local
 ```
 
-See `docs/OPENZERO_INTEGRATION.md`.
+See [docs/OPENZERO_INTEGRATION.md](docs/OPENZERO_INTEGRATION.md).
 
-## Real Integrations Included
+## Docs
 
-- Inbound voice: Twilio-compatible voice webhook at `/voice/twilio`.
-- Inbound SMS: Twilio webhook at `/sms/twilio` and generic JSON webhook at `/api/webhook/sms`.
-- Outbound SMS: Twilio, Telnyx, or any custom webhook.
-- Outbound calls: Twilio call API or a custom webhook.
-- Email: SMTP lead summaries and handoff emails.
-- Email intake: generic email webhook for mail parsers, n8n, Zapier, Make, or an internal mail gateway.
-- Calendar: token-protected `.ics` feed for appointment requests.
-- Booking systems: optional booking webhook for Cal.com, n8n, CRM booking flows, or internal APIs.
-- CRM/automation: generic webhook for n8n, Zapier, Make, CRM systems, or internal APIs.
-- OpenZero: event bridge plus `/api/openzero/context`.
-
-All integrations are optional. The app still works with only SQLite and the built-in rules backend.
-
-## Industry Playbooks
-
-Use the companion playbook library for ready-made intake structures covering plumbing, clinics, hotels, university admissions, estate agents, and agency discovery calls:
-
-https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks
+- [AI routing](docs/AI_ROUTING.md)
+- [Deployment](docs/DEPLOYMENT.md)
+- [CPU models](docs/CPU_MODELS.md)
+- [Integrations](docs/INTEGRATIONS.md)
+- [API and webhooks](docs/API.md)
+- [Industry playbooks](docs/INDUSTRY_PLAYBOOKS.md)
+- [Security guide](docs/SECURITY.md)
 
 ## Repository Boundary
 
@@ -119,4 +141,4 @@ Keep `.env`, SQLite runtime databases, uploads, transcripts, call recordings, an
 
 ## License
 
-MIT License. See `LICENSE`.
+MIT License. See [LICENSE](LICENSE).

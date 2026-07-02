@@ -30,18 +30,20 @@ GET http://127.0.0.1:8088/api/openzero/context
 
 This returns current stats, recent leads, public config, and capabilities.
 
-## OpenZero As LLM Bridge
+## OpenZero As The First LLM Bridge
 
-Set:
+Fresh installs can keep `LLM_BACKEND=auto`. In auto mode, FrontDeskAgent tries the OpenZero local LLM bridge before Ollama, llama.cpp, hosted APIs, or rules mode:
 
 ```env
-LLM_BACKEND=openzero
+LLM_BACKEND=auto
 OPENZERO_LLM_URL=http://127.0.0.1:1024/v1/chat/completions
 OPENZERO_MODEL=local
 OPENZERO_API_KEY=
 ```
 
-This lets OpenZero decide whether to use a local model, remote provider, or its own routing logic.
+This lets OpenZero decide whether to use a local model, remote provider, or its own routing logic. If OpenZero is not reachable, FrontDeskAgent continues down the local-first route order instead of failing the chat.
+
+Use `LLM_BACKEND=openzero` only when you want to force every model request through OpenZero.
 
 ## Useful Combined Workflows
 
