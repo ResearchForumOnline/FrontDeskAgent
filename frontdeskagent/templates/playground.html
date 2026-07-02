@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Playground | FrontDeskAgent{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Call and chat simulator</p>
+    <h1>Test the receptionist flow</h1>
+    <p>Try customer messages before connecting phone, SMS, website chat, or OpenZero.</p>
+  </div>
+</header>
+
+<section class="chat-shell">
+  <div id="chatLog" class="chat-log">
+    <div class="bubble agent">Hello. I can capture the enquiry, check urgency, and route it to the team. What does the caller need?</div>
+  </div>
+  <form id="chatForm" class="chat-form">
+    <textarea id="chatInput" required placeholder="Example: Hi, I have a leak under the sink in Manchester M14 and need someone today."></textarea>
+    <button class="button primary" type="submit">Send</button>
+  </form>
+</section>
+
+<section class="panel">
+  <h2>Save a lead manually</h2>
+  <form class="grid-form" method="post" action="/leads">
+    <label>Name<input name="name" placeholder="Caller name"></label>
+    <label>Phone<input name="phone" placeholder="+44..."></label>
+    <label>Email<input name="email" type="email" placeholder="caller@example.com"></label>
+    <label>Postcode<input name="postcode" placeholder="M14"></label>
+    <label>Urgency<select name="urgency"><option>normal</option><option>urgent</option></select></label>
+    <label>Preferred time<input name="preferred_time" placeholder="Today afternoon"></label>
+    <label class="wide">Reason<textarea name="reason" placeholder="What does the caller need?"></textarea></label>
+    <input type="hidden" name="source" value="playground">
+    <button class="button primary" type="submit">Create lead</button>
+  </form>
+</section>
+{% endblock %}

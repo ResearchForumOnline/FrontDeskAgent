@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | FrontDeskAgent{% endblock %}
+{% block content %}
+<header class="page-head">
+  <div>
+    <p class="eyebrow">Live console</p>
+    <h1>Front desk overview</h1>
+    <p>Local-first lead capture, appointment requests, handoffs, and model status.</p>
+  </div>
+  <a class="button primary" href="/playground">Test receptionist</a>
+</header>
+
+<section class="stats-grid">
+  <article><span>Total leads</span><strong>{{ stats.leads }}</strong></article>
+  <article><span>Open leads</span><strong>{{ stats.open_leads }}</strong></article>
+  <article><span>Appointments</span><strong>{{ stats.appointments }}</strong></article>
+  <article><span>Knowledge items</span><strong>{{ stats.knowledge }}</strong></article>
+</section>
+
+<section class="split">
+  <article class="panel">
+    <div class="panel-head"><h2>Recent leads</h2><a href="/leads">View all</a></div>
+    {% for lead in leads %}
+      <div class="list-row">
+        <span>{{ lead.urgency }}</span>
+        <b>{{ lead.name or "Unknown caller" }}</b>
+        <small>{{ lead.reason[:110] }}</small>
+      </div>
+    {% else %}
+      <p class="muted">No leads yet. Create one from the playground or webhook.</p>
+    {% endfor %}
+  </article>
+  <article class="panel">
+    <div class="panel-head"><h2>System</h2><a href="/api/healthz">Health JSON</a></div>
+    <div class="kv"><span>LLM backend</span><b>{{ model.backend }}</b></div>
+    <div class="kv"><span>Model status</span><b>{{ "OK" if model.ok else "Needs setup" }}</b></div>
+    <div class="kv"><span>OpenZero bridge</span><b>{{ "Configured" if config.openzero_enabled else "Off" }}</b></div>
+    <div class="kv"><span>Service areas</span><b>{{ config.service_areas }}</b></div>
+  </article>
+</section>
+
+<section class="panel">
+  <div class="panel-head"><h2>Recent events</h2><span>Local audit trail</span></div>
+  {% for event in events %}
+    <div class="event-row"><b>{{ event.event_type }}</b><small>{{ event.created_at }}</small><code>{{ event.payload[:160] }}</code></div>
+  {% else %}
+    <p class="muted">Events will appear after chats, leads, appointments, and webhooks.</p>
+  {% endfor %}
+</section>
+{% endblock %}

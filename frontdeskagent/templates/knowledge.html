@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Knowledge | FrontDeskAgent{% endblock %}
+{% block content %}
+<header class="page-head"><div><p class="eyebrow">Business memory</p><h1>Knowledge base</h1><p>Add service areas, prices, policies, scripts, emergency rules, FAQs, and handoff rules.</p></div></header>
+<section class="panel">
+  <form class="grid-form" method="post" action="/knowledge">
+    <label>Title<input name="title" required placeholder="Emergency plumbing script"></label>
+    <label>Tags<input name="tags" placeholder="plumber,urgent,booking"></label>
+    <label class="wide">Body<textarea name="body" required placeholder="What should the receptionist know?"></textarea></label>
+    <button class="button primary" type="submit">Add knowledge</button>
+  </form>
+</section>
+<section class="knowledge-grid">
+  {% for item in items %}
+  <article class="panel"><span class="eyebrow">{{ item.tags }}</span><h2>{{ item.title }}</h2><p>{{ item.body }}</p></article>
+  {% endfor %}
+</section>
+{% endblock %}

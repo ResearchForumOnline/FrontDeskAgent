@@ -1,0 +1,26 @@
+services:
+  frontdeskagent:
+    build: .
+    container_name: frontdeskagent
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./data:/app/data
+      - ./runtime:/app/runtime
+
+  # Optional local model server. Uncomment after installing Ollama on the host
+  # or replace this with a llama.cpp server container.
+  #
+  # ollama:
+  #   image: ollama/ollama:latest
+  #   restart: unless-stopped
+  #   ports:
+  #     - "11434:11434"
+  #   volumes:
+  #     - ollama:/root/.ollama
+  #
+  # volumes:
+  #   ollama:

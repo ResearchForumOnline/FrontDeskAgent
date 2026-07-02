@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Settings | FrontDeskAgent{% endblock %}
+{% block content %}
+<header class="page-head"><div><p class="eyebrow">Configuration</p><h1>Runtime settings</h1><p>Edit `.env` and restart the service to change these values.</p></div></header>
+<section class="panel">
+  <div class="settings-grid">
+    <div class="kv"><span>Business</span><b>{{ full_config.business_name }}</b></div>
+    <div class="kv"><span>Type</span><b>{{ full_config.business_type }}</b></div>
+    <div class="kv"><span>LLM backend</span><b>{{ full_config.llm_backend }}</b></div>
+    <div class="kv"><span>Ollama model</span><b>{{ full_config.ollama_model }}</b></div>
+    <div class="kv"><span>Database</span><b>{{ full_config.database_path }}</b></div>
+    <div class="kv"><span>OpenZero webhook</span><b>{{ "set" if full_config.openzero_webhook_url else "not set" }}</b></div>
+    <div class="kv"><span>SMTP</span><b>{{ "set" if full_config.smtp_host else "not set" }}</b></div>
+  </div>
+</section>
+<section class="panel">
+  <h2>Webhook test</h2>
+  <pre>curl -X POST http://localhost:8088/api/webhook/call \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Test Caller","phone":"+441234567890","transcript":"Need an urgent appointment today"}'</pre>
+</section>
+{% endblock %}

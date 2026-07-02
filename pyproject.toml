@@ -1,0 +1,15 @@
+[project]
+name = "frontdeskagent"
+version = "0.1.0"
+description = "CPU-first self-hosted AI receptionist and front desk console"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "Flask==3.0.3",
+  "gunicorn==22.0.0",
+  "python-dotenv==1.0.1",
+  "requests==2.32.3"
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

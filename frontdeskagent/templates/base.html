@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}FrontDeskAgent{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='app.css') }}">
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/">
+      <span class="mark">FD</span>
+      <span><strong>FrontDeskAgent</strong><small>Self-hosted receptionist</small></span>
+    </a>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/playground">Playground</a>
+      <a href="/leads">Leads</a>
+      <a href="/appointments">Appointments</a>
+      <a href="/knowledge">Knowledge</a>
+      <a href="/settings">Settings</a>
+    </nav>
+    <div class="side-note">
+      <b>{{ config.business_name }}</b>
+      <span>{{ config.business_type }} / {{ config.llm_backend }}</span>
+    </div>
+  </aside>
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

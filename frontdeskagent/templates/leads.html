@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Leads | FrontDeskAgent{% endblock %}
+{% block content %}
+<header class="page-head"><div><p class="eyebrow">Inbox</p><h1>Lead queue</h1><p>Every call, form, and chat should leave a clean record.</p></div></header>
+<section class="panel">
+  <table>
+    <thead><tr><th>ID</th><th>Created</th><th>Name</th><th>Contact</th><th>Urgency</th><th>Reason</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for lead in leads %}
+      <tr>
+        <td>#{{ lead.id }}</td>
+        <td>{{ lead.created_at }}</td>
+        <td>{{ lead.name or "Unknown" }}</td>
+        <td>{{ lead.phone }}<br>{{ lead.email }}</td>
+        <td><span class="badge {{ lead.urgency }}">{{ lead.urgency }}</span></td>
+        <td>{{ lead.reason[:180] }}</td>
+        <td>{{ lead.status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}

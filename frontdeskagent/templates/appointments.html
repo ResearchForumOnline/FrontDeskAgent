@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Appointments | FrontDeskAgent{% endblock %}
+{% block content %}
+<header class="page-head"><div><p class="eyebrow">Booking lane</p><h1>Appointment requests</h1><p>Log requests clearly until a real calendar integration confirms the slot.</p></div></header>
+<section class="panel">
+  <form class="grid-form" method="post" action="/appointments">
+    <label>Lead<select name="lead_id"><option value="">No lead selected</option>{% for lead in leads %}<option value="{{ lead.id }}">#{{ lead.id }} {{ lead.name or lead.phone or "Unknown" }}</option>{% endfor %}</select></label>
+    <label>Requested time<input name="requested_time" placeholder="Tomorrow 10:00"></label>
+    <label class="wide">Notes<textarea name="notes" placeholder="What should staff know?"></textarea></label>
+    <button class="button primary" type="submit">Create request</button>
+  </form>
+</section>
+<section class="panel">
+  <table>
+    <thead><tr><th>ID</th><th>Lead</th><th>Requested time</th><th>Status</th><th>Notes</th></tr></thead>
+    <tbody>{% for item in appointments %}<tr><td>#{{ item.id }}</td><td>{{ item.lead_name or item.lead_phone or "Manual" }}</td><td>{{ item.requested_time }}</td><td>{{ item.status }}</td><td>{{ item.notes }}</td></tr>{% endfor %}</tbody>
+  </table>
+</section>
+{% endblock %}
