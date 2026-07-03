@@ -132,6 +132,9 @@ See [docs/OPENZERO_INTEGRATION.md](docs/OPENZERO_INTEGRATION.md).
 - [API and webhooks](docs/API.md)
 - [Industry playbooks](docs/INDUSTRY_PLAYBOOKS.md)
 - [Security guide](docs/SECURITY.md)
+- [Self-hosted business guide](docs/SELF_HOSTED_BUSINESS_GUIDE.md)
+- [Roadmap](docs/ROADMAP.md)
+- [Changelog](CHANGELOG.md)
 
 ## Repository Boundary
 
