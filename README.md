@@ -15,6 +15,12 @@ Public site: https://frontdeskagent.online/
 
 Companion playbooks: https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks
 
+## Featured Ecosystem Video
+
+[![TalkToAI: Sovereignty Through ZeroThink and OpenZero Infrastructure](https://i.ytimg.com/vi/R52hsRdCmSM/hqdefault.jpg)](https://www.youtube.com/watch?v=R52hsRdCmSM)
+
+Watch how the wider TalkToAI stack fits together: ZeroThink, OpenZero, local-first AI infrastructure, and practical self-hosted products such as FrontDeskAgent.
+
 ## What It Gives You
 
 - Local lead inbox for web chat, forms, SMS, email, and phone intake events.
