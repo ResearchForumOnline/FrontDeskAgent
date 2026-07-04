@@ -25,6 +25,9 @@ def integration_status(config: AppConfig) -> dict:
         "openzero": bool(config.openzero_webhook_url or config.llm_backend == "openzero"),
         "outbound_calls": outbound_enabled(config),
         "voice_webhook": bool(config.public_base_url),
+        "voice_tts": voice_tts_enabled(config),
+        "voice_tts_provider": config.voice_tts_provider,
+        "voicebox": voicebox_enabled(config),
         "twilio_signature_validation": bool(config.twilio_validate_signatures and config.twilio_auth_token),
     }
 
@@ -107,6 +110,50 @@ def outbound_enabled(config: AppConfig) -> bool:
     if config.outbound_call_provider == "webhook":
         return bool(config.outbound_webhook_url)
     return False
+
+
+def voice_tts_enabled(config: AppConfig) -> bool:
+    return voicebox_enabled(config)
+
+
+def voicebox_enabled(config: AppConfig) -> bool:
+    return config.voice_tts_provider == "voicebox" and bool(config.voicebox_url)
+
+
+def speak_with_voicebox(config: AppConfig, text: str, profile: str = "") -> dict:
+    text = (text or "").strip()
+    if not text:
+        return {"spoken": False, "reason": "text is missing"}
+    if not voicebox_enabled(config):
+        return {"spoken": False, "reason": "Voicebox is not configured"}
+
+    payload = {"text": text[:5000]}
+    selected_profile = (profile or config.voicebox_profile or "").strip()
+    if selected_profile:
+        payload["profile"] = selected_profile
+
+    headers = {
+        "Content-Type": "application/json",
+        "X-Voicebox-Client-Id": config.voicebox_client_id or "frontdeskagent",
+    }
+    response = requests.post(
+        f"{config.voicebox_url.rstrip('/')}/speak",
+        headers=headers,
+        json=payload,
+        timeout=config.voicebox_timeout_seconds,
+    )
+    response.raise_for_status()
+    try:
+        data = response.json()
+    except ValueError:
+        data = {}
+    return {
+        "spoken": True,
+        "provider": "voicebox",
+        "status": response.status_code,
+        "profile": selected_profile,
+        "response": data,
+    }
 
 
 def place_outbound_call(config: AppConfig, to_phone: str, message: str) -> dict:

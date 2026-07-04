@@ -32,6 +32,7 @@ Watch how the wider TalkToAI stack fits together: ZeroThink, OpenZero, local-fir
 - Twilio SMS webhook plus generic JSON SMS and email intake webhooks.
 - Outbound SMS through Twilio, Telnyx, or any custom webhook.
 - Outbound callback trigger through Twilio or a custom webhook.
+- Optional Voicebox local voice output for staff alerts and agent speech.
 - SMTP staff handoff emails.
 - CRM, booking, n8n, Zapier, Make, and internal API webhooks.
 - OpenZero event bridge and `/api/openzero/context` for local agent supervision.
@@ -71,6 +72,29 @@ OPENAI_COMPAT_MODEL=gpt-5.5
 ```
 
 Keep paid providers optional. The app is designed to keep running locally without them.
+
+## Open-Source Voice With Voicebox
+
+FrontDeskAgent now supports Voicebox as an optional local voice output backend. Voicebox is a local-first open-source voice stack in the same product category as cloud voice tools, but it runs on your own machine and exposes a simple REST API.
+
+Use it for staff alerts, agent speech, demos, front-desk desk-side announcements, and OpenZero-supervised workflows:
+
+```env
+VOICE_TTS_PROVIDER=voicebox
+VOICEBOX_URL=http://127.0.0.1:17493
+VOICEBOX_PROFILE=Morgan
+VOICEBOX_ALERT_ON_LEAD=true
+```
+
+Then test:
+
+```bash
+curl -X POST http://localhost:8088/api/voice/speak \
+  -H "Content-Type: application/json" \
+  -d '{"text":"FrontDeskAgent voice test complete.","profile":"Morgan"}'
+```
+
+Phone calls still use Twilio or a custom call webhook for carrier connectivity. Voicebox gives the self-hosted app a local open-source voice layer without making speech output depend on a paid cloud voice provider.
 
 ## Quick Start
 

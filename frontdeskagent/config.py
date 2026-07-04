@@ -67,6 +67,12 @@ class AppConfig:
     outbound_webhook_url: str = ""
     voice_greeting: str = "Thanks for calling. Please briefly say your name, phone number, and what you need help with."
     transfer_urgent_calls: bool = False
+    voice_tts_provider: str = "none"
+    voicebox_url: str = "http://127.0.0.1:17493"
+    voicebox_profile: str = ""
+    voicebox_client_id: str = "frontdeskagent"
+    voicebox_timeout_seconds: int = 20
+    voicebox_alert_on_lead: bool = False
     crm_webhook_url: str = ""
     crm_api_key: str = ""
     calendar_feed_token: str = ""
@@ -138,6 +144,12 @@ def load_config() -> AppConfig:
             "Thanks for calling. Please briefly say your name, phone number, and what you need help with.",
         ),
         transfer_urgent_calls=_bool(os.getenv("TRANSFER_URGENT_CALLS"), False),
+        voice_tts_provider=os.getenv("VOICE_TTS_PROVIDER", "none").strip().lower(),
+        voicebox_url=os.getenv("VOICEBOX_URL", "http://127.0.0.1:17493").rstrip("/"),
+        voicebox_profile=os.getenv("VOICEBOX_PROFILE", ""),
+        voicebox_client_id=os.getenv("VOICEBOX_CLIENT_ID", "frontdeskagent"),
+        voicebox_timeout_seconds=int(os.getenv("VOICEBOX_TIMEOUT_SECONDS", "20")),
+        voicebox_alert_on_lead=_bool(os.getenv("VOICEBOX_ALERT_ON_LEAD"), False),
         crm_webhook_url=os.getenv("CRM_WEBHOOK_URL", ""),
         crm_api_key=os.getenv("CRM_API_KEY", ""),
         calendar_feed_token=os.getenv("CALENDAR_FEED_TOKEN", ""),
@@ -163,6 +175,8 @@ def public_config(config: AppConfig) -> dict:
         "crm_enabled": bool(config.crm_webhook_url),
         "calendar_enabled": bool(config.calendar_feed_token),
         "public_base_url": config.public_base_url,
+        "voice_tts_provider": config.voice_tts_provider,
+        "voicebox_enabled": bool(config.voice_tts_provider == "voicebox" and config.voicebox_url),
     }
 
 

@@ -1,6 +1,6 @@
 # Integrations
 
-FrontDeskAgent works without paid APIs in rules mode. Add providers only when you want phone numbers, SMS, email, CRM automation, or outbound callbacks.
+FrontDeskAgent works without paid APIs in rules mode. Add providers only when you want phone numbers, SMS, email, CRM automation, outbound callbacks, or local voice output.
 
 ## SMS
 
@@ -61,6 +61,35 @@ Generic webhook:
 OUTBOUND_CALL_PROVIDER=webhook
 OUTBOUND_WEBHOOK_URL=https://your-voice-system.example/call
 ```
+
+## Local Voice Output With Voicebox
+
+Voicebox is the recommended open-source local voice route for FrontDeskAgent staff alerts and agent speech. It is useful when you want the front desk to speak on the local machine without depending on a paid cloud TTS provider.
+
+Run Voicebox locally, then set:
+
+```env
+VOICE_TTS_PROVIDER=voicebox
+VOICEBOX_URL=http://127.0.0.1:17493
+VOICEBOX_PROFILE=Morgan
+VOICEBOX_CLIENT_ID=frontdeskagent
+VOICEBOX_ALERT_ON_LEAD=true
+```
+
+Test:
+
+```bash
+curl -X POST https://your-domain.example/api/voice/speak \
+  -H "Content-Type: application/json" \
+  -d '{"text":"New lead received. Please check the dashboard.","profile":"Morgan"}'
+```
+
+Notes:
+
+- `VOICEBOX_ALERT_ON_LEAD=true` speaks a short local staff alert whenever a new lead is created.
+- `/api/voice/speak` uses the same auth boundary as the dashboard unless you deliberately change deployment rules.
+- Twilio or a carrier webhook is still needed for real phone-number connectivity. Voicebox is the local voice output layer.
+- Do not clone or use a person's voice without permission.
 
 ## Email
 

@@ -5,7 +5,7 @@
   <div>
     <p class="eyebrow">Connect the front desk</p>
     <h1>Integrations</h1>
-    <p>Start with the built-in dashboard, then add phone, SMS, email, CRM, calendar, OpenZero, and local model routes as needed.</p>
+    <p>Start with the built-in dashboard, then add phone, SMS, email, CRM, calendar, OpenZero, Voicebox, and local model routes as needed.</p>
   </div>
   <a class="button primary" href="/settings">Runtime settings</a>
 </header>
@@ -19,6 +19,7 @@
   <article class="panel"><h2>Booking systems</h2><div class="kv"><span>Webhook</span><b>{{ "Configured" if integrations.booking else "Not configured" }}</b></div><p class="muted">Send appointment requests to Cal.com, n8n, a CRM, or another booking workflow for confirmation.</p></article>
   <article class="panel"><h2>Calendar</h2><div class="kv"><span>ICS feed</span><b>{{ "Configured" if integrations.calendar_feed else "Not configured" }}</b></div>{% if full_config.calendar_feed_token %}<pre>{{ full_config.public_base_url or "http://localhost:8088" }}/calendar.ics?token={{ full_config.calendar_feed_token }}</pre>{% endif %}<p class="muted">Subscribe from Google Calendar, Outlook, Apple Calendar, or Nextcloud as a tentative appointment feed.</p></article>
   <article class="panel"><h2>OpenZero</h2><div class="kv"><span>Bridge</span><b>{{ "Configured" if integrations.openzero else "Not configured" }}</b></div><p class="muted">OpenZero can read `/api/openzero/context` and receive lead, appointment, and handoff events.</p></article>
+  <article class="panel"><h2>Voicebox</h2><div class="kv"><span>Local voice output</span><b>{{ "Configured" if integrations.voicebox else "Not configured" }}</b></div><div class="kv"><span>Speak API</span><b>{{ full_config.public_base_url or "http://localhost:8088" }}/api/voice/speak</b></div><p class="muted">Connect local Voicebox for open-source voice output, cloned/preset voices, and staff lead alerts without making voice a paid cloud dependency.</p></article>
 </section>
 
 <section class="panel">
@@ -33,6 +34,10 @@ curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/ou
 
 curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/webhook/email \
   -H "Content-Type: application/json" \
-  -d '{"from":"caller@example.com","subject":"Quote request","body":"Can you call me tomorrow?"}'</pre>
+  -d '{"from":"caller@example.com","subject":"Quote request","body":"Can you call me tomorrow?"}'
+
+curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/voice/speak \
+  -H "Content-Type: application/json" \
+  -d '{"text":"New lead received. Please check the dashboard.","profile":"{{ full_config.voicebox_profile }}"}'</pre>
 </section>
 {% endblock %}

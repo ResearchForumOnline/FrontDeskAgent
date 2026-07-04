@@ -51,3 +51,4 @@ Use `LLM_BACKEND=openzero` only when you want to force every model request throu
 - FrontDeskAgent logs a booking request, OpenZero checks local files or CRM exports.
 - FrontDeskAgent handles first reply, OpenZero watches for missed handoffs.
 - OpenZero can periodically call `/api/openzero/context` and produce an operator digest.
+- OpenZero can call `/api/voice/speak` when Voicebox is enabled so important front-desk events can speak locally without a cloud voice provider.

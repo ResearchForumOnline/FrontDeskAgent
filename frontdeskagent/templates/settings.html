@@ -14,6 +14,8 @@
     <div class="kv"><span>Admin auth</span><b>{{ "on" if integrations.admin_auth else "off" }}</b></div>
     <div class="kv"><span>SMS provider</span><b>{{ full_config.sms_provider }}</b></div>
     <div class="kv"><span>Outbound calls</span><b>{{ "set" if integrations.outbound_calls else "not set" }}</b></div>
+    <div class="kv"><span>Voice output</span><b>{{ integrations.voice_tts_provider }}</b></div>
+    <div class="kv"><span>Voicebox</span><b>{{ "configured" if integrations.voicebox else "not configured" }}</b></div>
     <div class="kv"><span>CRM webhook</span><b>{{ "set" if integrations.crm else "not set" }}</b></div>
     <div class="kv"><span>Booking webhook</span><b>{{ "set" if integrations.booking else "not set" }}</b></div>
     <div class="kv"><span>Calendar feed</span><b>{{ "set" if integrations.calendar_feed else "not set" }}</b></div>
@@ -26,6 +28,13 @@
   <pre>curl -X POST http://localhost:8088/api/webhook/call \
   -H "Content-Type: application/json" \
   -d '{"name":"Test Caller","phone":"+441234567890","transcript":"Need an urgent appointment today"}'</pre>
+</section>
+<section class="panel">
+  <h2>Voicebox test</h2>
+  <pre>curl -X POST http://localhost:8088/api/voice/speak \
+  -H "Content-Type: application/json" \
+  -d '{"text":"FrontDeskAgent voice test complete.","profile":"{{ full_config.voicebox_profile }}"}'</pre>
+  <p class="muted">Set `VOICE_TTS_PROVIDER=voicebox` and run Voicebox locally to use open-source voice output for staff alerts and agent speech.</p>
 </section>
 <section class="panel">
   <h2>Beginner setup</h2>

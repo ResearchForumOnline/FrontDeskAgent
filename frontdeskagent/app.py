@@ -17,6 +17,7 @@ from .integrations import (
     send_booking_event,
     send_crm_event,
     send_sms,
+    speak_with_voicebox,
     verify_twilio_signature,
 )
 from .intake import detect_urgency, extract_contact, lead_summary
@@ -312,6 +313,20 @@ def create_app(config: AppConfig | None = None) -> Flask:
         app.config["FDA_DB"].add_event("outbound.api_callback", compact_payload({"request": payload, "result": result}))
         return jsonify(result)
 
+    @app.post("/api/voice/speak")
+    def api_voice_speak():
+        payload = request.get_json(silent=True) or {}
+        text = str(payload.get("text") or payload.get("message") or "").strip()
+        if not text:
+            return jsonify({"error": "text is required"}), 400
+        profile = str(payload.get("profile") or "").strip()
+        result = safe_external(speak_with_voicebox, config, text, profile)
+        app.config["FDA_DB"].add_event(
+            "voicebox.speak",
+            compact_payload({"text_preview": text[:180], "profile": profile, "result": result}),
+        )
+        return jsonify(result)
+
     @app.get("/api/openzero/context")
     def openzero_context():
         db: Database = app.config["FDA_DB"]
@@ -335,6 +350,7 @@ def create_app(config: AppConfig | None = None) -> Flask:
                 "booking_webhook",
                 "calendar_ics_feed",
                 "outbound_callback",
+                "voicebox_local_tts",
             ],
             "integrations": integration_status(config),
         })
@@ -387,7 +403,11 @@ def handle_new_lead(app: Flask, data: dict, event_type: str, customer_sms: bool 
     if data.get("urgency") == "urgent" and config.escalation_sms_enabled and config.escalation_phone:
         escalation_sms = safe_external(send_sms, config, config.escalation_phone, f"Urgent FrontDeskAgent lead #{lead_id}: {data.get('summary', '')[:900]}")
         record_external_result(db, "sms.escalation", escalation_sms)
-    return {"lead_id": lead_id, "openzero": openzero, "email": email, "crm": crm, "sms": sms, "escalation_sms": escalation_sms}
+    voice_alert = {"spoken": False, "reason": "auto voice alerts disabled"}
+    if config.voicebox_alert_on_lead:
+        voice_alert = safe_external(speak_with_voicebox, config, lead_voice_alert(config, data, lead_id))
+        record_external_result(db, "voicebox.lead_alert", voice_alert)
+    return {"lead_id": lead_id, "openzero": openzero, "email": email, "crm": crm, "sms": sms, "escalation_sms": escalation_sms, "voice_alert": voice_alert}
 
 
 def safe_external(func, *args, **kwargs) -> dict:
@@ -399,6 +419,13 @@ def safe_external(func, *args, **kwargs) -> dict:
 
 def record_external_result(db: Database, event_type: str, result: dict) -> None:
     db.add_event(event_type, compact_payload(result))
+
+
+def lead_voice_alert(config: AppConfig, data: dict, lead_id: int) -> str:
+    name = data.get("name") or data.get("phone") or "a new caller"
+    urgency = data.get("urgency") or "normal"
+    reason = data.get("reason") or data.get("summary") or "new enquiry"
+    return f"New {urgency} FrontDeskAgent lead {lead_id} for {config.business_name} from {name}. {str(reason)[:240]}"
 
 
 def xml(text: str) -> Response:

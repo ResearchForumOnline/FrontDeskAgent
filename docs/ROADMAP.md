@@ -9,6 +9,7 @@ FrontDeskAgent is intended to be a useful self-hosted front desk system, not jus
 - Better OpenZero connection checks.
 - Stronger website ingestion controls.
 - More integration examples for n8n, Zapier, Make, CRMs, booking tools, and call/SMS providers.
+- More Voicebox examples for self-hosted staff alerts and desk-side speech.
 - More screenshots and videos for non-technical users.
 
 ## Mid Term
@@ -23,7 +24,7 @@ FrontDeskAgent is intended to be a useful self-hosted front desk system, not jus
 ## Long Term
 
 - Multi-location business support.
-- Better voice-call orchestration.
+- Better voice-call orchestration and richer Voicebox call-flow examples.
 - More local model profiles for CPU-only servers.
 - Richer OpenZero supervision workflows.
 - Privacy-first analytics.
@@ -37,4 +38,3 @@ FrontDeskAgent is intended to be a useful self-hosted front desk system, not jus
 - Hosted APIs optional, not mandatory.
 - Customer data belongs with the operator.
 - Public repo stays open-source; private customer deployments keep their private data outside Git.
-

@@ -89,6 +89,17 @@ X-FrontDeskAgent-Secret: optional-shared-secret
 
 Works with `OUTBOUND_CALL_PROVIDER=twilio` or `OUTBOUND_CALL_PROVIDER=webhook`.
 
+## Local Voice Output
+
+```http
+POST /api/voice/speak
+Content-Type: application/json
+
+{"text":"New lead received. Please check the dashboard.","profile":"Morgan"}
+```
+
+When `VOICE_TTS_PROVIDER=voicebox`, FrontDeskAgent forwards the text to the local Voicebox REST API at `VOICEBOX_URL` using `POST /speak`. This is intended for local staff alerts, agent speech, demos, and OpenZero-supervised workflows. It is not a phone carrier by itself.
+
 ## Website Knowledge Import
 
 ```http

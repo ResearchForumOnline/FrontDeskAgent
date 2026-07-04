@@ -55,6 +55,14 @@ def main() -> int:
     crm_webhook = ask("CRM/n8n/Zapier/Make webhook URL", "")
     booking_webhook = ask("Booking/calendar webhook URL", "")
     openzero_webhook = ask("OpenZero event webhook URL", "")
+    voice_tts_provider = ask_choice("Local voice output", ["none", "voicebox"], "none")
+    voicebox_url = "http://127.0.0.1:17493"
+    voicebox_profile = ""
+    voicebox_alert_on_lead = "false"
+    if voice_tts_provider == "voicebox":
+        voicebox_url = ask("Voicebox URL", "http://127.0.0.1:17493").rstrip("/")
+        voicebox_profile = ask("Voicebox profile name or ID", "")
+        voicebox_alert_on_lead = "true" if ask_choice("Speak new lead alerts", ["false", "true"], "false") == "true" else "false"
 
     values = {
         "APP_HOST": "0.0.0.0",
@@ -103,6 +111,12 @@ def main() -> int:
         "OUTBOUND_WEBHOOK_URL": "",
         "VOICE_GREETING": "Thanks for calling. Please briefly say your name, phone number, and what you need help with.",
         "TRANSFER_URGENT_CALLS": "false",
+        "VOICE_TTS_PROVIDER": voice_tts_provider,
+        "VOICEBOX_URL": voicebox_url,
+        "VOICEBOX_PROFILE": voicebox_profile,
+        "VOICEBOX_CLIENT_ID": "frontdeskagent",
+        "VOICEBOX_TIMEOUT_SECONDS": "20",
+        "VOICEBOX_ALERT_ON_LEAD": voicebox_alert_on_lead,
         "CRM_WEBHOOK_URL": crm_webhook,
         "CRM_API_KEY": "",
         "CALENDAR_FEED_TOKEN": token_urlsafe(24),
@@ -126,6 +140,7 @@ def main() -> int:
     print(f"  Twilio Voice webhook: {public_url}/voice/twilio")
     print(f"  Twilio SMS webhook: {public_url}/sms/twilio")
     print(f"  Generic SMS webhook: {public_url}/api/webhook/sms")
+    print(f"  Voice speak API: {public_url}/api/voice/speak")
     print(f"  OpenZero context: {public_url}/api/openzero/context")
     print(f"  Calendar feed: {public_url}/calendar.ics?token={values['CALENDAR_FEED_TOKEN']}")
     return 0

@@ -45,4 +45,4 @@ bash install-frontdeskagent.sh
 
 ## Search-Friendly Summary
 
-FrontDeskAgent is for self-hosted AI receptionist, AI front desk, local business chatbot, CPU-first AI agent, Twilio voice webhook, SMS intake, appointment request logging, OpenZero integration, Ollama receptionist, and local-first customer intake workflows.
+FrontDeskAgent is for self-hosted AI receptionist, AI front desk, local business chatbot, CPU-first AI agent, Twilio voice webhook, SMS intake, appointment request logging, OpenZero integration, Voicebox local voice output, Ollama receptionist, and local-first customer intake workflows.
