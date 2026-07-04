@@ -315,15 +315,19 @@ def create_app(config: AppConfig | None = None) -> Flask:
 
     @app.post("/api/voice/speak")
     def api_voice_speak():
+        if config.webhook_shared_secret:
+            provided = request.headers.get("X-FrontDeskAgent-Secret", "")
+            if provided != config.webhook_shared_secret:
+                return jsonify({"error": "invalid webhook secret"}), 403
         payload = request.get_json(silent=True) or {}
         text = str(payload.get("text") or payload.get("message") or "").strip()
         if not text:
             return jsonify({"error": "text is required"}), 400
-        profile = str(payload.get("profile") or "").strip()
+        profile = str(payload.get("profile_id") or payload.get("profile") or "").strip()
         result = safe_external(speak_with_voicebox, config, text, profile)
         app.config["FDA_DB"].add_event(
             "voicebox.speak",
-            compact_payload({"text_preview": text[:180], "profile": profile, "result": result}),
+            compact_payload({"text_preview": text[:180], "profile_id": profile, "result": result}),
         )
         return jsonify(result)
 

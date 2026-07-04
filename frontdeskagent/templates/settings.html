@@ -33,7 +33,8 @@
   <h2>Voicebox test</h2>
   <pre>curl -X POST http://localhost:8088/api/voice/speak \
   -H "Content-Type: application/json" \
-  -d '{"text":"FrontDeskAgent voice test complete.","profile":"{{ full_config.voicebox_profile }}"}'</pre>
+  -H "X-FrontDeskAgent-Secret: your-shared-secret" \
+  -d '{"text":"FrontDeskAgent voice test complete.","profile_id":"{{ full_config.voicebox_profile }}"}'</pre>
   <p class="muted">Set `VOICE_TTS_PROVIDER=voicebox` and run Voicebox locally to use open-source voice output for staff alerts and agent speech.</p>
 </section>
 <section class="panel">

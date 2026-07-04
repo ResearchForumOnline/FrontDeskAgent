@@ -127,9 +127,15 @@ def speak_with_voicebox(config: AppConfig, text: str, profile: str = "") -> dict
     if not voicebox_enabled(config):
         return {"spoken": False, "reason": "Voicebox is not configured"}
 
+    endpoint = normalize_voicebox_endpoint(config.voicebox_endpoint)
     payload = {"text": text[:5000]}
     selected_profile = (profile or config.voicebox_profile or "").strip()
-    if selected_profile:
+    if endpoint.endswith("/generate"):
+        if selected_profile:
+            payload["profile_id"] = selected_profile
+        if config.voicebox_language:
+            payload["language"] = config.voicebox_language
+    elif selected_profile:
         payload["profile"] = selected_profile
 
     headers = {
@@ -137,7 +143,7 @@ def speak_with_voicebox(config: AppConfig, text: str, profile: str = "") -> dict
         "X-Voicebox-Client-Id": config.voicebox_client_id or "frontdeskagent",
     }
     response = requests.post(
-        f"{config.voicebox_url.rstrip('/')}/speak",
+        f"{config.voicebox_url.rstrip('/')}{endpoint}",
         headers=headers,
         json=payload,
         timeout=config.voicebox_timeout_seconds,
@@ -151,9 +157,17 @@ def speak_with_voicebox(config: AppConfig, text: str, profile: str = "") -> dict
         "spoken": True,
         "provider": "voicebox",
         "status": response.status_code,
-        "profile": selected_profile,
+        "endpoint": endpoint,
+        "profile_id": selected_profile,
         "response": data,
     }
+
+
+def normalize_voicebox_endpoint(endpoint: str) -> str:
+    endpoint = (endpoint or "/generate").strip()
+    if not endpoint.startswith("/"):
+        endpoint = f"/{endpoint}"
+    return endpoint
 
 
 def place_outbound_call(config: AppConfig, to_phone: str, message: str) -> dict:

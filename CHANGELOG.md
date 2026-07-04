@@ -2,6 +2,10 @@
 
 ## 2026-07-04
 
+- Aligned the Voicebox integration with the current public Voicebox REST API: default `POST /generate`, `profile_id`, and `language`.
+- Added `VOICEBOX_ENDPOINT` and `VOICEBOX_LANGUAGE` configuration.
+- Hardened numeric environment parsing so malformed timeout/port values fall back safely.
+- Protected `/api/voice/speak` with `X-FrontDeskAgent-Secret` when `WEBHOOK_SHARED_SECRET` is configured.
 - Added optional Voicebox local voice output for staff alerts and `/api/voice/speak`.
 - Added Voicebox lead-alert automation with `VOICEBOX_ALERT_ON_LEAD=true`.
 - Documented the open-source voice route across README, API, integrations, OpenZero integration, and release discovery docs.

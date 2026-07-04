@@ -91,7 +91,9 @@ def test_voicebox_speak_posts_to_local_api(tmp_path: Path, monkeypatch):
         make_config(tmp_path),
         voice_tts_provider="voicebox",
         voicebox_url="http://voicebox.local:17493",
+        voicebox_endpoint="/generate",
         voicebox_profile="Morgan",
+        voicebox_language="en",
         voicebox_client_id="frontdeskagent-test",
         voicebox_timeout_seconds=3,
     )
@@ -113,9 +115,9 @@ def test_voicebox_speak_posts_to_local_api(tmp_path: Path, monkeypatch):
     monkeypatch.setattr("frontdeskagent.integrations.requests.post", fake_post)
     result = speak_with_voicebox(config, "New lead received.")
     assert result["spoken"] is True
-    assert seen["url"] == "http://voicebox.local:17493/speak"
+    assert seen["url"] == "http://voicebox.local:17493/generate"
     assert seen["headers"]["X-Voicebox-Client-Id"] == "frontdeskagent-test"
-    assert seen["json"] == {"text": "New lead received.", "profile": "Morgan"}
+    assert seen["json"] == {"text": "New lead received.", "profile_id": "Morgan", "language": "en"}
     assert seen["timeout"] == 3
 
 
@@ -125,6 +127,17 @@ def test_voice_speak_api_requires_text(tmp_path: Path):
     response = client.post("/api/voice/speak", json={})
     assert response.status_code == 400
     assert response.json["error"] == "text is required"
+
+
+def test_voice_speak_api_accepts_webhook_secret(tmp_path: Path):
+    config = replace(make_config(tmp_path), webhook_shared_secret="voice-secret")
+    app = create_app(config)
+    client = app.test_client()
+    denied = client.post("/api/voice/speak", json={"text": "hello"})
+    assert denied.status_code == 403
+    allowed = client.post("/api/voice/speak", json={"text": "hello"}, headers={"X-FrontDeskAgent-Secret": "voice-secret"})
+    assert allowed.status_code == 200
+    assert allowed.json["spoken"] is False
 
 
 def test_voicebox_alert_on_lead(tmp_path: Path, monkeypatch):
@@ -158,7 +171,7 @@ def test_voicebox_alert_on_lead(tmp_path: Path, monkeypatch):
     )
     assert response.status_code == 200
     assert response.json["voice_alert"]["spoken"] is True
-    assert calls[0]["url"] == "http://voicebox.local:17493/speak"
+    assert calls[0]["url"] == "http://voicebox.local:17493/generate"
     assert "New urgent FrontDeskAgent lead" in calls[0]["json"]["text"]
 
 

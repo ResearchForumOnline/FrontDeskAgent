@@ -82,7 +82,9 @@ Use it for staff alerts, agent speech, demos, front-desk desk-side announcements
 ```env
 VOICE_TTS_PROVIDER=voicebox
 VOICEBOX_URL=http://127.0.0.1:17493
-VOICEBOX_PROFILE=Morgan
+VOICEBOX_ENDPOINT=/generate
+VOICEBOX_PROFILE=your-profile-id
+VOICEBOX_LANGUAGE=en
 VOICEBOX_ALERT_ON_LEAD=true
 ```
 
@@ -91,10 +93,11 @@ Then test:
 ```bash
 curl -X POST http://localhost:8088/api/voice/speak \
   -H "Content-Type: application/json" \
-  -d '{"text":"FrontDeskAgent voice test complete.","profile":"Morgan"}'
+  -H "X-FrontDeskAgent-Secret: your-shared-secret" \
+  -d '{"text":"FrontDeskAgent voice test complete.","profile_id":"your-profile-id"}'
 ```
 
-Phone calls still use Twilio or a custom call webhook for carrier connectivity. Voicebox gives the self-hosted app a local open-source voice layer without making speech output depend on a paid cloud voice provider.
+Phone calls still use Twilio or a custom call webhook for carrier connectivity. Voicebox gives the self-hosted app a local open-source voice layer without making speech output depend on a paid cloud voice provider. By default, FrontDeskAgent calls Voicebox `POST /generate` with `text`, `profile_id`, and `language`.
 
 ## Quick Start
 

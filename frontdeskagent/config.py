@@ -13,6 +13,13 @@ def _bool(value: str | None, default: bool = False) -> bool:
     return value.strip().lower() in {"1", "true", "yes", "on"}
 
 
+def _int(value: str | None, default: int) -> int:
+    try:
+        return int(value or default)
+    except (TypeError, ValueError):
+        return default
+
+
 @dataclass(frozen=True)
 class AppConfig:
     host: str
@@ -69,7 +76,9 @@ class AppConfig:
     transfer_urgent_calls: bool = False
     voice_tts_provider: str = "none"
     voicebox_url: str = "http://127.0.0.1:17493"
+    voicebox_endpoint: str = "/generate"
     voicebox_profile: str = ""
+    voicebox_language: str = "en"
     voicebox_client_id: str = "frontdeskagent"
     voicebox_timeout_seconds: int = 20
     voicebox_alert_on_lead: bool = False
@@ -87,7 +96,7 @@ def load_config() -> AppConfig:
     Path(database_path).expanduser().resolve().parent.mkdir(parents=True, exist_ok=True)
     return AppConfig(
         host=os.getenv("APP_HOST", "0.0.0.0"),
-        port=int(os.getenv("APP_PORT", "8088")),
+        port=_int(os.getenv("APP_PORT"), 8088),
         secret_key=os.getenv("SECRET_KEY", "dev-only-change-me"),
         database_path=database_path,
         business_name=os.getenv("BUSINESS_NAME", "FrontDeskAgent Demo"),
@@ -109,11 +118,11 @@ def load_config() -> AppConfig:
         openzero_llm_url=os.getenv("OPENZERO_LLM_URL", "http://127.0.0.1:1024/v1/chat/completions"),
         openzero_model=os.getenv("OPENZERO_MODEL", "local"),
         openzero_api_key=os.getenv("OPENZERO_API_KEY", ""),
-        llm_timeout_seconds=int(os.getenv("LLM_TIMEOUT_SECONDS", "45")),
+        llm_timeout_seconds=_int(os.getenv("LLM_TIMEOUT_SECONDS"), 45),
         openzero_webhook_url=os.getenv("OPENZERO_WEBHOOK_URL", ""),
         webhook_shared_secret=os.getenv("WEBHOOK_SHARED_SECRET", ""),
         smtp_host=os.getenv("SMTP_HOST", ""),
-        smtp_port=int(os.getenv("SMTP_PORT", "587")),
+        smtp_port=_int(os.getenv("SMTP_PORT"), 587),
         smtp_username=os.getenv("SMTP_USERNAME", ""),
         smtp_password=os.getenv("SMTP_PASSWORD", ""),
         smtp_from=os.getenv("SMTP_FROM", ""),
@@ -146,16 +155,18 @@ def load_config() -> AppConfig:
         transfer_urgent_calls=_bool(os.getenv("TRANSFER_URGENT_CALLS"), False),
         voice_tts_provider=os.getenv("VOICE_TTS_PROVIDER", "none").strip().lower(),
         voicebox_url=os.getenv("VOICEBOX_URL", "http://127.0.0.1:17493").rstrip("/"),
+        voicebox_endpoint=os.getenv("VOICEBOX_ENDPOINT", "/generate").strip() or "/generate",
         voicebox_profile=os.getenv("VOICEBOX_PROFILE", ""),
+        voicebox_language=os.getenv("VOICEBOX_LANGUAGE", "en"),
         voicebox_client_id=os.getenv("VOICEBOX_CLIENT_ID", "frontdeskagent"),
-        voicebox_timeout_seconds=int(os.getenv("VOICEBOX_TIMEOUT_SECONDS", "20")),
+        voicebox_timeout_seconds=_int(os.getenv("VOICEBOX_TIMEOUT_SECONDS"), 20),
         voicebox_alert_on_lead=_bool(os.getenv("VOICEBOX_ALERT_ON_LEAD"), False),
         crm_webhook_url=os.getenv("CRM_WEBHOOK_URL", ""),
         crm_api_key=os.getenv("CRM_API_KEY", ""),
         calendar_feed_token=os.getenv("CALENDAR_FEED_TOKEN", ""),
         booking_webhook_url=os.getenv("BOOKING_WEBHOOK_URL", ""),
         booking_api_key=os.getenv("BOOKING_API_KEY", ""),
-        website_import_max_chars=int(os.getenv("WEBSITE_IMPORT_MAX_CHARS", "12000")),
+        website_import_max_chars=_int(os.getenv("WEBSITE_IMPORT_MAX_CHARS"), 12000),
     )
 
 

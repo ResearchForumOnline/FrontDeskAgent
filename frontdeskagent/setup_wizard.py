@@ -61,7 +61,7 @@ def main() -> int:
     voicebox_alert_on_lead = "false"
     if voice_tts_provider == "voicebox":
         voicebox_url = ask("Voicebox URL", "http://127.0.0.1:17493").rstrip("/")
-        voicebox_profile = ask("Voicebox profile name or ID", "")
+        voicebox_profile = ask("Voicebox profile ID", "")
         voicebox_alert_on_lead = "true" if ask_choice("Speak new lead alerts", ["false", "true"], "false") == "true" else "false"
 
     values = {
@@ -113,7 +113,9 @@ def main() -> int:
         "TRANSFER_URGENT_CALLS": "false",
         "VOICE_TTS_PROVIDER": voice_tts_provider,
         "VOICEBOX_URL": voicebox_url,
+        "VOICEBOX_ENDPOINT": "/generate",
         "VOICEBOX_PROFILE": voicebox_profile,
+        "VOICEBOX_LANGUAGE": "en",
         "VOICEBOX_CLIENT_ID": "frontdeskagent",
         "VOICEBOX_TIMEOUT_SECONDS": "20",
         "VOICEBOX_ALERT_ON_LEAD": voicebox_alert_on_lead,

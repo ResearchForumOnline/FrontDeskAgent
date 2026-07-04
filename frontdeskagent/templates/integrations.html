@@ -38,6 +38,7 @@ curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/we
 
 curl -X POST {{ full_config.public_base_url or "http://localhost:8088" }}/api/voice/speak \
   -H "Content-Type: application/json" \
-  -d '{"text":"New lead received. Please check the dashboard.","profile":"{{ full_config.voicebox_profile }}"}'</pre>
+  -H "X-FrontDeskAgent-Secret: your-shared-secret" \
+  -d '{"text":"New lead received. Please check the dashboard.","profile_id":"{{ full_config.voicebox_profile }}"}'</pre>
 </section>
 {% endblock %}
