@@ -100,6 +100,19 @@ less install-frontdeskagent.sh
 bash install-frontdeskagent.sh
 ```
 
+## Downloads And Releases
+
+| Need | Link |
+| --- | --- |
+| Latest GitHub source archive | [Download ZIP](https://github.com/ResearchForumOnline/FrontDeskAgent/archive/refs/heads/main.zip) |
+| GitHub releases | [FrontDeskAgent releases](https://github.com/ResearchForumOnline/FrontDeskAgent/releases) |
+| One-line install script | [install.sh](install.sh) |
+| Deployment guide | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
+| OpenZero integration | [docs/OPENZERO_INTEGRATION.md](docs/OPENZERO_INTEGRATION.md) |
+| Industry playbooks | [ResearchForumOnline/FrontDeskAgent-Playbooks](https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks) |
+
+FrontDeskAgent is written for people searching for a self-hosted AI receptionist, local AI phone agent, AI front desk, open-source call intake system, local-first business chatbot, Twilio voice webhook receptionist, Ollama receptionist, and OpenZero-powered customer intake agent.
+
 ## Pages In The App
 
 - Dashboard: live counts, recent leads, integration status, model status, and activity.
@@ -132,6 +145,7 @@ See [docs/OPENZERO_INTEGRATION.md](docs/OPENZERO_INTEGRATION.md).
 ## Docs
 
 - [AI routing](docs/AI_ROUTING.md)
+- [Downloads and releases](docs/DOWNLOADS_AND_RELEASES.md)
 - [Deployment](docs/DEPLOYMENT.md)
 - [CPU models](docs/CPU_MODELS.md)
 - [Integrations](docs/INTEGRATIONS.md)
