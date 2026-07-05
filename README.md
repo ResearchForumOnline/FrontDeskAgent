@@ -33,6 +33,7 @@ Watch how the wider TalkToAI stack fits together: ZeroThink, OpenZero, local-fir
 - Outbound SMS through Twilio, Telnyx, or any custom webhook.
 - Outbound callback trigger through Twilio or a custom webhook.
 - Optional Voicebox local voice output for staff alerts and agent speech.
+- Optional CallChat integration path so the same OpenZero and Voicebox stack can power a Matrix room agent.
 - SMTP staff handoff emails.
 - CRM, booking, n8n, Zapier, Make, and internal API webhooks.
 - OpenZero event bridge and `/api/openzero/context` for local agent supervision.
@@ -136,6 +137,7 @@ bash install-frontdeskagent.sh
 | One-line install script | [install.sh](install.sh) |
 | Deployment guide | [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
 | OpenZero integration | [docs/OPENZERO_INTEGRATION.md](docs/OPENZERO_INTEGRATION.md) |
+| CallChat integration | [docs/CALLCHAT_INTEGRATION.md](docs/CALLCHAT_INTEGRATION.md) |
 | Industry playbooks | [ResearchForumOnline/FrontDeskAgent-Playbooks](https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks) |
 
 FrontDeskAgent is written for people searching for a self-hosted AI receptionist, local AI phone agent, AI front desk, open-source call intake system, local-first business chatbot, Twilio voice webhook receptionist, Ollama receptionist, and OpenZero-powered customer intake agent.
@@ -169,6 +171,12 @@ OPENZERO_MODEL=local
 
 See [docs/OPENZERO_INTEGRATION.md](docs/OPENZERO_INTEGRATION.md).
 
+## CallChat Integration
+
+The same OpenZero and Voicebox services can also power a CallChat Matrix room agent such as `@zero:callchat.org`. This lets a business run local AI reception workflows and secure Matrix room assistance from one self-hosted stack.
+
+See [docs/CALLCHAT_INTEGRATION.md](docs/CALLCHAT_INTEGRATION.md).
+
 ## Docs
 
 - [AI routing](docs/AI_ROUTING.md)
@@ -177,6 +185,7 @@ See [docs/OPENZERO_INTEGRATION.md](docs/OPENZERO_INTEGRATION.md).
 - [CPU models](docs/CPU_MODELS.md)
 - [Integrations](docs/INTEGRATIONS.md)
 - [API and webhooks](docs/API.md)
+- [CallChat integration](docs/CALLCHAT_INTEGRATION.md)
 - [Industry playbooks](docs/INDUSTRY_PLAYBOOKS.md)
 - [Security guide](docs/SECURITY.md)
 - [Self-hosted business guide](docs/SELF_HOSTED_BUSINESS_GUIDE.md)
