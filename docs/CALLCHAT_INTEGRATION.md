@@ -48,6 +48,20 @@ VOICEBOX_URL=http://127.0.0.1:17493
 
 Store real passwords and API keys outside Git.
 
+## Useful CallChat Commands
+
+```text
+!zero help
+!zero callchat
+!zero openzero
+!zero frontdesk
+!zero voice
+!zero rules
+!zero status
+```
+
+`!zero status` should stay fast by checking endpoint reachability, not by waiting on a full local model reply.
+
 ## Safety Boundary
 
 - FrontDeskAgent customer data should not be posted into public Matrix rooms automatically.
