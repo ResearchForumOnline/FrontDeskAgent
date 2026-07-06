@@ -15,6 +15,14 @@ Public site: https://frontdeskagent.online/
 
 Companion playbooks: https://github.com/ResearchForumOnline/FrontDeskAgent-Playbooks
 
+## Live Receptionist Demo
+
+The public website now includes a small live receptionist demo at https://frontdeskagent.online/.
+
+It lets visitors type or speak to a FrontDeskAgent-style receptionist, hear a browser-spoken reply, and ask about missed-call recovery, booking intake, SMS/email handoff, pricing, OpenZero, Voicebox, and self-hosted installs. The public demo is rate-limited to five AI asks per visitor per day so one browser cannot consume the shared demo lane.
+
+The live demo is not a replacement for a production phone number. Real deployments connect approved call flows, Twilio or custom call webhooks, private business knowledge, staff handoff rules, CRM/booking integrations, and optional Voicebox local speech.
+
 ## Featured Ecosystem Video
 
 [![TalkToAI: Sovereignty Through ZeroThink and OpenZero Infrastructure](https://i.ytimg.com/vi/R52hsRdCmSM/hqdefault.jpg)](https://www.youtube.com/watch?v=R52hsRdCmSM)
