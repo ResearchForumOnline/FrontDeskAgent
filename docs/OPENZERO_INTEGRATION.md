@@ -55,7 +55,7 @@ Use `LLM_BACKEND=openzero` only when you want to force every model request throu
 
 ## Website Receptionist Demo Pattern
 
-The public FrontDeskAgent Online website demonstrates the idea with a small browser widget. Visitors can type or speak to a receptionist-style agent, hear a browser-spoken answer, and ask about pricing, booking intake, OpenZero, Voicebox, or self-hosting.
+The public FrontDeskAgent Online website demonstrates the idea with a small browser widget. Visitors can type or speak to a receptionist-style agent, receive an OpenZero-backed answer through the shared CallChat bridge, and hear a server Voicebox reply with browser speech as fallback. The public demo currently allows 60 AI asks per visitor per site per day with per-minute abuse controls, while production installs should use their own approved limits and business knowledge.
 
 For production use, keep the public website demo separate from the private business agent:
 
