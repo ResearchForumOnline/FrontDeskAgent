@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-07-06
+
+- Added public-site live receptionist demo notes for frontdeskagent.online.
+- Documented the demo boundary: five public AI asks per visitor per day, browser speech output, and production phone flows handled through real approved integrations.
+- Clarified that production deployments should connect Twilio or custom call webhooks, private business knowledge, CRM/booking routes, staff handoff rules, and optional Voicebox local speech.
+
 ## 2026-07-04
 
 - Aligned the Voicebox integration with the current public Voicebox REST API: default `POST /generate`, `profile_id`, and `language`.
