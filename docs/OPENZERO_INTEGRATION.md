@@ -52,3 +52,16 @@ Use `LLM_BACKEND=openzero` only when you want to force every model request throu
 - FrontDeskAgent handles first reply, OpenZero watches for missed handoffs.
 - OpenZero can periodically call `/api/openzero/context` and produce an operator digest.
 - OpenZero can call `/api/voice/speak` when Voicebox is enabled so important front-desk events can speak locally without a cloud voice provider.
+
+## Website Receptionist Demo Pattern
+
+The public FrontDeskAgent Online website demonstrates the idea with a small browser widget. Visitors can type or speak to a receptionist-style agent, hear a browser-spoken answer, and ask about pricing, booking intake, OpenZero, Voicebox, or self-hosting.
+
+For production use, keep the public website demo separate from the private business agent:
+
+- Public demo: short, rate-limited, product-aware, no secrets, no real customer records.
+- Production agent: private knowledge base, approved scripts, real call/SMS/email/booking/CRM integrations, staff handoff rules, and customer-data controls.
+- OpenZero route: use a local or private OpenZero-compatible endpoint for business-specific reasoning where possible.
+- Voicebox route: use local Voicebox speech for staff alerts or demos when configured.
+
+Do not expose private API keys, webhook secrets, call recordings, transcripts, customer details, or production OpenZero admin endpoints in public browser JavaScript.
