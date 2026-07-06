@@ -3,6 +3,7 @@
 ## 2026-07-06
 
 - Added public-site live receptionist demo notes for frontdeskagent.online.
+- Added documentation for the hosted local Vosk speech-to-text fallback used when browser speech recognition is unavailable.
 - Documented the upgraded demo boundary: OpenZero-backed answers through the shared CallChat bridge, server Voicebox audio first, browser speech fallback, 200 public AI asks per visitor per site per day, and production phone flows handled through real approved integrations.
 - Clarified that production deployments should connect Twilio or custom call webhooks, private business knowledge, CRM/booking routes, staff handoff rules, and optional Voicebox local speech.
 
