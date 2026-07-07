@@ -19,7 +19,7 @@ Companion playbooks: https://github.com/ResearchForumOnline/FrontDeskAgent-Playb
 
 The public website now includes a live receptionist demo at https://frontdeskagent.online/.
 
-It lets visitors type or speak to a FrontDeskAgent-style receptionist, get an OpenZero-backed answer through the shared CallChat bridge, and hear a server Voicebox reply with browser speech as fallback. When a browser does not expose native speech recognition, the live site can record a short clip and use the CallChat local Vosk speech-to-text lane before asking the agent. Visitors can ask about missed-call recovery, booking intake, SMS/email handoff, pricing, OpenZero, Voicebox, and self-hosted installs. The public demo is rate-limited to 200 AI asks per visitor per site per day with per-minute abuse controls so the shared demo lane stays usable.
+It lets visitors type or speak to a FrontDeskAgent-style receptionist, get an OpenZero-backed answer through the shared CallChat bridge, and hear a server Voicebox reply with browser speech as fallback. When a browser does not expose native speech recognition, the live site can record a short clip and use the CallChat local Vosk speech-to-text lane before asking the agent. Visitors can ask about missed-call recovery, booking intake, SMS/email handoff, pricing, OpenZero, Voicebox, and self-hosted installs. The public demo keeps abuse controls in place so the shared lane stays usable without exposing operational thresholds.
 
 The live demo is not a replacement for a production phone number. Real deployments connect approved call flows, Twilio or custom call webhooks, private business knowledge, staff handoff rules, CRM/booking integrations, and optional Voicebox local speech.
 
